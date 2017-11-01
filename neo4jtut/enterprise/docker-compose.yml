@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  instance1:
+    image: neo4j:3.2-enterprise
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs1:/logs
+    hostname: instance1
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=1
+      - NEO4J_ha_host_coordination=instance1:5001
+      - NEO4J_ha_host_data=instance1:6001
+      - NEO4J_ha_initialHosts=instance1:5001,instance2:5001,instance3:5001,instance4:5001
+  instance2:
+    image: neo4j:3.2-enterprise
+    ports:
+      - 7475:7474
+      - 7688:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs2:/logs
+    hostname: instance2
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=2
+      - NEO4J_ha_host_coordination=instance2:5001
+      - NEO4J_ha_host_data=instance2:6001
+      - NEO4J_ha_initialHosts=instance1:5001,instance2:5001,instance3:5001,instance4:5001
+    depends_on:
+      - "instance1"
+  instance3:
+    image: neo4j:3.2-enterprise
+    ports:
+      - 7476:7474
+      - 7689:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs3:/logs
+    hostname: instance3
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=3
+      - NEO4J_ha_host_coordination=instance3:5001
+      - NEO4J_ha_host_data=instance3:6001
+      - NEO4J_ha_initialHosts=instance1:5001,instance2:5001,instance3:5001,instance4:5001
+    depends_on:
+      - "instance2"
+  instance4:
+    image: neo4j:3.2-enterprise
+    ports:
+      - 7477:7474
+      - 7690:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs4:/logs
+    hostname: instance4
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=4
+      - NEO4J_ha_host_coordination=instance4:5001
+      - NEO4J_ha_host_data=instance4:6001
+      - NEO4J_ha_initialHosts=instance1:5001,instance2:5001,instance3:5001,instance4:5001
+    depends_on:
+      - "instance2"
+networks:
+  cluster:
+    driver: bridge

@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  apache-service:
+    build: ./apache
+    volumes:
+      - ./apache/app:/var/www/html
+    ports:
+      - 8077:80

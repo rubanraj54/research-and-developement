@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  instance1:
+    image: orientdb
+    ports:
+      - 2424:2424
+      - 2480:2480
+    volumes:
+      - $HOME/orientdb/databases1:/orientdb/databases
+      - $HOME/orientdb/config1/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
+      - $HOME/orientdb/backup1:/orientdb/backup
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd1     
+      - ORIENTDB_NODE_NAME=node1
+    command: /orientdb/bin/server.sh  -Ddistributed=true
+  instance2:
+    image: orientdb
+    ports:
+      - 2425:2424
+      - 2481:2480
+    volumes:
+      - $HOME/orientdb/databases2:/orientdb/databases
+      - $HOME/orientdb/config2/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
+      - $HOME/orientdb/backup2:/orientdb/backup
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd2     
+      - ORIENTDB_NODE_NAME=node2
+    command: /orientdb/bin/server.sh  -Ddistributed=true
+  instance3:
+    image: orientdb
+    ports:
+      - 2426:2424
+      - 2482:2480
+    volumes:
+      - $HOME/orientdb/databases3:/orientdb/databases
+      - $HOME/orientdb/config3/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
+      - $HOME/orientdb/backup3:/orientdb/backup
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd3     
+      - ORIENTDB_NODE_NAME=node3
+    command: /orientdb/bin/server.sh  -Ddistributed=true
+  instance3:
+    image: orientdb
+    ports:
+      - 2427:2424
+      - 2483:2480
+    volumes:
+      - $HOME/orientdb/databases4:/orientdb/databases
+      - $HOME/orientdb/config4/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
+      - $HOME/orientdb/backup4:/orientdb/backup
+    environment:
+      - ORIENTDB_ROOT_PASSWORD=rootpwd4     
+      - ORIENTDB_NODE_NAME=node4
+    command: /orientdb/bin/server.sh  -Ddistributed=true

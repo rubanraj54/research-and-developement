@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  neo4j-community-1:
+    image: neo4j:3.2.3
+    ports:
+      - 9998:7474
+      - 7778:7687
+    volumes:
+      - ~/neo4j/data:/data
+      - ~/neo4j/logs:/logs
+  neo4j-community-2:
+    image: neo4j:3.2.3
+    ports:
+      - 9999:7474
+      - 7779:7687
+    volumes:
+      - ~/neo4jone/data:/data
+      - ~/neo4jone/logs:/logs
