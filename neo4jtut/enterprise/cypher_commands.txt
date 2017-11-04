@@ -12,6 +12,8 @@ CREATE (root:Root {name:"root"}),
 (root)-[:CHILD {value: "year"}]->(yr2),
 (yr1)-[:NEXT]->(yr2)
 
-Match (year:Year {name:"2017"}) 
-MATCH (month:Month) WHERE month.name = "March" OR month.name ="April" 
+Match (year:Year {name:"2017"})
+MATCH (month:Month) WHERE month.name = "March" OR month.name ="April"
 CREATE (year)-[child:CHILD {name:"month"}]->(month)
+
+command: curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7474/user/neo4j/password
