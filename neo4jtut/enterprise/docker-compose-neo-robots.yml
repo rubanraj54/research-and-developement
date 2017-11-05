@@ -1,3 +1,44 @@
 version: '3'
 
 services:
+  neorobot1:
+    image: neo-robot:latest
+    ports:
+      - 7475:7474
+      - 7688:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs1:/logs
+      - $HOME/neo4j-enterprise/data1:/data
+      - $PWD/events:/events
+    hostname: neorobot1
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=1
+      - NEO4J_ha_host_coordination=neorobot1:5001
+      - NEO4J_ha_host_data=neorobot1:6001
+      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001,
+  neorobot2:
+    image: neo-robot:latest
+    ports:
+      - 7476:7474
+      - 7689:7687
+    volumes:
+      - $HOME/neo4j-enterprise/logs2:/logs
+      - $HOME/neo4j-enterprise/data2:/data
+      - $PWD/events:/events
+    hostname: neorobot2
+    networks:
+      - cluster
+    environment:
+      - NEO4J_dbms_mode=HA
+      - NEO4J_ha_serverId=2
+      - NEO4J_ha_host_coordination=neorobot2:5001
+      - NEO4J_ha_host_data=neorobot2:6001
+      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001,
+    depends_on:
+      - neorobot1
+networks:
+  cluster:
+    driver: bridge
