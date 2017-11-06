@@ -1,11 +1,14 @@
 from events import *
+import random
 
-def check_possibility(datetime):
-    root = Root.nodes.get_or_none(name="root")
+random.seed(9001)
+
+def check_possibility(datetime,_robot_id):
+    root = Root.nodes.get_or_none(name="root",robot_id=_robot_id)
     if root is None:
-        Root(name="root").save()
+        root = Root(name="root",robot_id=_robot_id).save()
 
-    year = Root.nodes.get_or_none(name="root").year.get_or_none(name=datetime[0])
+    year = root.year.get_or_none(name=datetime[0])
     if year is None:
         year = Year(name=datetime[0]).save()
         root.year.connect(year)
@@ -40,10 +43,22 @@ def check_possibility(datetime):
         millisecond = MilliSecond(name=datetime[6]).save()
         second.millisecond.connect(millisecond)
 
-    return True,millisecond
+    return millisecond
 
 
-def add_event(event,datetime):
-    result = check_possibility(datetime)
-    if result[0]:
-        event.millisecond.connect(result[1])
+def add_event(event,timestamp,robot_id):
+    millisecond = check_possibility(timestamp,robot_id)
+    event.millisecond.connect(millisecond)
+
+def get_event(event_id):
+    if event_id == 1:
+        return LocationEvent(latitude = random.uniform(1.0, 100.0),longitude = random.uniform(1.0, 100.0),
+                      offset = random.uniform(1.0, 100.0),accuracy = random.uniform(1.0, 100.0)).save()
+    elif event_id == 2:
+        return HandleBarVoltageEvent(voltage = random.uniform(1.0, 100.0)).save()
+    elif event_id == 3:
+        return MototBarVoltageEvent(motor_id = random.randint(1, 10),voltage = random.uniform(1.0, 100.0),
+                      current = random.uniform(1.0, 100.0)).save()
+    elif event_id == 4:
+        return PoseEvent(x = random.uniform(1.0, 100.0),y = random.uniform(1.0, 100.0),
+                      z = random.uniform(1.0, 100.0),theta = random.uniform(1.0, 100.0)).save()

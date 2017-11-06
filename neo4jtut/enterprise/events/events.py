@@ -4,8 +4,8 @@ from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
 config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
 
 class Root(StructuredNode):
+    robot_id = IntegerProperty()
     name = StringProperty(unique_index=True, required=True)
-
     year = RelationshipTo('Year', 'CHILD')
 
 class Year(StructuredNode):
