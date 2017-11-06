@@ -3,9 +3,9 @@ from events import *
 def check_possibility(datetime):
     root = Root.nodes.get_or_none(name="root")
     if root is None:
-        root = Root(name="root").save()
+        Root(name="root").save()
 
-    year = root.year.get_or_none(name=datetime[0])
+    year = Root.nodes.get_or_none(name="root").year.get_or_none(name=datetime[0])
     if year is None:
         year = Year(name=datetime[0]).save()
         root.year.connect(year)
