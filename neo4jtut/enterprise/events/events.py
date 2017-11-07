@@ -75,7 +75,6 @@ class PoseEvent(StructuredNode):
     y = FloatProperty()
     z = FloatProperty()
     theta = FloatProperty()
-    image_base = StringProperty()
     millisecond = RelationshipTo('MilliSecond', 'EVENT_AT')
 
 class SpeedEvent(StructuredNode):
@@ -88,4 +87,9 @@ class SpeedEvent(StructuredNode):
 class DistanceLogEvent(StructuredNode):
     name = StringProperty(index=True, default="distance_log_event")
     travelled_log = StringProperty()
+    millisecond = RelationshipTo('MilliSecond', 'EVENT_AT')
+
+class RGBEvent(StructuredNode):
+    name = StringProperty(index=True, default="rgb_event")
+    image_base64 = StringProperty()
     millisecond = RelationshipTo('MilliSecond', 'EVENT_AT')

@@ -9,6 +9,7 @@ services:
     volumes:
       - $HOME/neo4j-enterprise/logs1:/logs
       - $HOME/neo4j-enterprise/data1:/data
+      - $HOME/neo4j-enterprise/tmp1:/var/tmp/
       - $PWD/events:/events
     hostname: neorobot1
     networks:
@@ -19,6 +20,7 @@ services:
       - NEO4J_ha_host_coordination=neorobot1:5001
       - NEO4J_ha_host_data=neorobot1:6001
       - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001,
+      - NEO4J_dbms_memory_heap_maxSize=1G
   neorobot2:
     image: neo-robot:latest
     ports:
@@ -27,6 +29,7 @@ services:
     volumes:
       - $HOME/neo4j-enterprise/logs2:/logs
       - $HOME/neo4j-enterprise/data2:/data
+      - $HOME/neo4j-enterprise/tmp2:/var/tmp/
       - $PWD/events:/events
     hostname: neorobot2
     networks:
@@ -37,6 +40,7 @@ services:
       - NEO4J_ha_host_coordination=neorobot2:5001
       - NEO4J_ha_host_data=neorobot2:6001
       - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001,
+      - NEO4J_dbms_memory_heap_maxSize=1G
     depends_on:
       - neorobot1
 networks:
