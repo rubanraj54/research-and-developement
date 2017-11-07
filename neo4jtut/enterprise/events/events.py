@@ -2,6 +2,7 @@ from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
     UniqueIdProperty, RelationshipTo, RelationshipFrom,cardinality,FloatProperty)
 
 config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
+config.NEOMODEL_CYPHER_DEBUG = 0
 
 class Root(StructuredNode):
     robot_id = IntegerProperty()
@@ -74,6 +75,7 @@ class PoseEvent(StructuredNode):
     y = FloatProperty()
     z = FloatProperty()
     theta = FloatProperty()
+    image_base = StringProperty()
     millisecond = RelationshipTo('MilliSecond', 'EVENT_AT')
 
 class SpeedEvent(StructuredNode):
