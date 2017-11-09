@@ -17,3 +17,11 @@ MATCH (month:Month) WHERE month.name = "March" OR month.name ="April"
 CREATE (year)-[child:CHILD {name:"month"}]->(month)
 
 command: curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7474/user/neo4j/password
+
+curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7475/user/neo4j/password
+
+curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7476/user/neo4j/password
+
+curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7477/user/neo4j/password
+
+curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7478/user/neo4j/password

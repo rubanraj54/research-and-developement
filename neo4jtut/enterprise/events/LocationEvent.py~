@@ -15,9 +15,9 @@ from threading import Lock
 from events import LocationEvent
 from utils import *
 
-frequency = 60.0 #Herz
+frequency = 150.0 #Herz
 mutex = threading.Lock()
-minutes = 30
+minutes = 5
 
 logging.basicConfig(filename="/var/tmp/query_execution_"+datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+".log",
                             filemode='a',
@@ -32,26 +32,24 @@ def consume(q,robot_id):
         # name = threading.currentThread().getName()
         event,timestamp = q.get();
         mutex.acquire(1)
+        start_time = timeit.default_timer()
         add_event(event,timestamp.strftime('%Y,%m,%d,%H,%M,%S,%f')[:-3].split(','),robot_id)
         q.task_done()
         mutex.release()
+        logging.info("Robot id: " + robot_id +" Event id: "+event.name +" took " + str(timeit.default_timer() - start_time) + " sec")
 
-def producer(q,event_id):
+def producer(q):
     # the main thread will put new events to the queue
 
-    t_end = time.time() + (60 * minutes)
+    t_end = time.time() + 60 * minutes
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        start_time = timeit.default_timer()
-        event = get_event(event_id)
-        end_time = timeit.default_timer()
+        event = get_event(random.randint(1,5))
         timestamp = datetime.datetime.utcnow()
         q.put((event,timestamp))
-        logging.info("Robot_id: " + robot_id +" Event_id: "+event.name +" " + str(end_time - start_time) + " sec")
         time.sleep(1/frequency)
 
     q.join()
-    print "produced all events"
 
 if __name__ == '__main__':
     robot_id = sys.argv[1]
@@ -65,9 +63,8 @@ if __name__ == '__main__':
         t.start()
 
     # Create number of event producer threads equal to number of events
-    for i in range(1,6):
-        event_id = i
-        t = threading.Thread(name = "ProducerThread-"+str(i), target=producer, args=(q,event_id,))
+    for i in range(5):
+        t = threading.Thread(name = "ProducerThread-"+str(i), target=producer, args=(q,))
         t.start()
 
     q.join()

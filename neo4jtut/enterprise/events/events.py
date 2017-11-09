@@ -50,7 +50,7 @@ class MilliSecond(StructuredNode):
     next_millisecond = RelationshipTo('MilliSecond', 'NEXT')
 
 class LocationEvent(StructuredNode):
-    name = StringProperty(index=True, default="location event")
+    name = StringProperty(index=True, default="location_event")
     latitude = FloatProperty()
     longitude = FloatProperty()
     offset = FloatProperty()

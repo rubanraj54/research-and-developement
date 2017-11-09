@@ -7,7 +7,7 @@ random.seed(9001)
 fileHandle = open ( 'big_image_base64.txt', 'r' )
 big_image_base64 = fileHandle.read()
 fileHandle.close()
-
+big_image_base64_path = "/var/data/big_image_base64.txt"
 def check_possibility(datetime,_robot_id):
     root = Root.nodes.get_or_none(name="root",robot_id=_robot_id)
     if root is None:
@@ -53,20 +53,19 @@ def check_possibility(datetime,_robot_id):
 
 def add_event(event,timestamp,robot_id):
     millisecond = check_possibility(timestamp,robot_id)
-    event.save()
     event.millisecond.connect(millisecond)
 
 def get_event(event_id):
     if event_id == 1:
         return LocationEvent(latitude = random.uniform(1.0, 100.0),longitude = random.uniform(1.0, 100.0),
-                      offset = random.uniform(1.0, 100.0),accuracy = random.uniform(1.0, 100.0))
+                      offset = random.uniform(1.0, 100.0),accuracy = random.uniform(1.0, 100.0)).save()
     elif event_id == 2:
-        return HandleBarVoltageEvent(voltage = random.uniform(1.0, 100.0))
+        return HandleBarVoltageEvent(voltage = random.uniform(1.0, 100.0)).save()
     elif event_id == 3:
         return MototBarVoltageEvent(motor_id = random.randint(1, 10),voltage = random.uniform(1.0, 100.0),
-                      current = random.uniform(1.0, 100.0))
+                      current = random.uniform(1.0, 100.0)).save()
     elif event_id == 4:
         return PoseEvent(x = random.uniform(1.0, 100.0),y = random.uniform(1.0, 100.0),
-                      z = random.uniform(1.0, 100.0),theta = random.uniform(1.0, 100.0))
+                      z = random.uniform(1.0, 100.0),theta = random.uniform(1.0, 100.0)).save()
     elif event_id == 5:
-        return RGBEvent(image_base64=big_image_base64)
+        return RGBEvent(image_base64=big_image_base64_path).save()
