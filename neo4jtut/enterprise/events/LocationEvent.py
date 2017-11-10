@@ -15,7 +15,7 @@ from threading import Lock
 from events import LocationEvent
 from utils import *
 
-frequency = 60.0 #Herz
+frequency = 120.0 #Herz
 mutex = threading.Lock()
 minutes = 30
 

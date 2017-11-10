@@ -11,7 +11,7 @@ services:
       - $HOME/orientdb/config1/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
       - $HOME/orientdb/backup1:/orientdb/backup
     environment:
-      - ORIENTDB_ROOT_PASSWORD=rootpwd1     
+      - ORIENTDB_ROOT_PASSWORD=rootpwd1
       - ORIENTDB_NODE_NAME=node1
     command: /orientdb/bin/server.sh  -Ddistributed=true
   instance2:
@@ -24,7 +24,7 @@ services:
       - $HOME/orientdb/config2/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
       - $HOME/orientdb/backup2:/orientdb/backup
     environment:
-      - ORIENTDB_ROOT_PASSWORD=rootpwd2     
+      - ORIENTDB_ROOT_PASSWORD=rootpwd2
       - ORIENTDB_NODE_NAME=node2
     command: /orientdb/bin/server.sh  -Ddistributed=true
   instance3:
@@ -37,7 +37,7 @@ services:
       - $HOME/orientdb/config3/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
       - $HOME/orientdb/backup3:/orientdb/backup
     environment:
-      - ORIENTDB_ROOT_PASSWORD=rootpwd3     
+      - ORIENTDB_ROOT_PASSWORD=rootpwd3
       - ORIENTDB_NODE_NAME=node3
     command: /orientdb/bin/server.sh  -Ddistributed=true
   instance4:
@@ -50,6 +50,6 @@ services:
       - $HOME/orientdb/config4/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json
       - $HOME/orientdb/backup4:/orientdb/backup
     environment:
-      - ORIENTDB_ROOT_PASSWORD=rootpwd4     
+      - ORIENTDB_ROOT_PASSWORD=rootpwd4
       - ORIENTDB_NODE_NAME=node4
     command: /orientdb/bin/server.sh  -Ddistributed=true
