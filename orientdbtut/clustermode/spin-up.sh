@@ -2,7 +2,7 @@
 
 #initialization
 # dont forget to use exact version number
-IMAGE_NAME="orientdb:3.0.0m2-spatial"
+IMAGE_NAME="orient-robot:latest"
 DEFAULT_PORT_ORIENTDB=2424
 DEFAULT_PORT_ORIENTDB_STUDIO=2480
 COORDINATION_INSTANCE_PORT=5001
@@ -36,7 +36,7 @@ do
   echo -e "      - $((DEFAULT_PORT_ORIENTDB_STUDIO+(i-1))):$DEFAULT_PORT_ORIENTDB_STUDIO" >> $DOCKER_FILE_NAME
   echo -e "    volumes:" >> $DOCKER_FILE_NAME
   echo -e "      - \$HOME/orientdb/databases$i:/orientdb/databases" >> $DOCKER_FILE_NAME
-  echo -e "      - \$HOME/orientdb/config$i/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json" >> $DOCKER_FILE_NAME
+  # echo -e "      - \$HOME/orientdb/config$i/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json" >> $DOCKER_FILE_NAME
   echo -e "      - \$HOME/orientdb/backup$i:/orientdb/backup" >> $DOCKER_FILE_NAME
   echo -e "      - \$PWD/src:/src" >> $DOCKER_FILE_NAME
   echo -e "    environment:" >> $DOCKER_FILE_NAME
