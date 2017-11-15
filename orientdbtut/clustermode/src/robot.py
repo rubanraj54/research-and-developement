@@ -8,14 +8,7 @@ import logging
 
 from utils import *
 
-frequency = 30.0 #Herz
-minutes = 1
-
-logging.basicConfig(filename="/var/executionlogs/QE_orientdb_robot_id_1_"+("wb_" if blob_flag else "")+datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+".log",
-                            filemode='a',
-                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.INFO)
+import os, os.path
 
 
 def makerelation(robot_id,relation_ship_queue):
@@ -45,11 +38,11 @@ def producer(q,event_id,vertex,cluster_id):
     # the main thread will put new events to the queue
 
     t_end = time.time() + (60 * minutes)
-    
+
     _frequency = 1.0 if vertex is "RGBEvent" else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        event = get_event(event_id)
+        event = get_event(event_id,blob_flag)
         q.put((event,vertex,cluster_id))
         time.sleep(1.0/_frequency)
 
@@ -61,13 +54,36 @@ def dbsizelogger(robot_id):
     # _logger = setup_logger('db_size_logger', "/var/executionlogs/DB_size_robot_id_1"+time_stamp_log_file+".log")
     while running_status is True:
         size = _client.db_size()
-        logging.info("Robot_id: " + robot_id +" DB size : "+ str(size))
+        logging.info("Robot_id: " + str(robot_id) +" DB size : "+ str(size))
         time.sleep(1)
 
 
 if __name__ == '__main__':
 
     robot_id = sys.argv[1]
+
+    frequency = float(sys.argv[2]) #Herz
+
+    minutes = float(sys.argv[3])
+
+    blob_flag = True if(sys.argv[4] == "1") else False
+
+    usecase_name = sys.argv[5]
+
+    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"+ \
+                ("withblob/" if blob_flag else "withoutblob/")
+
+    filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
+            str(frequency)+"hz_"+("withblob.log" if blob_flag else "withoutblob.log")
+
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    logging.basicConfig(filename=(filepath+filename),
+                                filemode='a',
+                                format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                                datefmt='%H:%M:%S',
+                                level=logging.INFO)
 
     ### init db
     client = db_connect()

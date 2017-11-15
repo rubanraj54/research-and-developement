@@ -8,7 +8,6 @@ big_image_base64 = fileHandle.read()
 fileHandle.close()
 
 big_image_base64_path = "/var/data/big_image_base64.txt"
-blob_flag = True
 
 def db_connect():
     client = pyorient.OrientDB("localhost", 2424)
@@ -70,7 +69,7 @@ def create_relation(event,_client,robot_id):
     ")"
     )
 
-def get_event(event_id):
+def get_event(event_id,blob_flag):
     if event_id == 0:
         return {'latitude' : random.uniform(1.0, 100.0),'longitude' : random.uniform(1.0, 100.0),
                       'offset' : random.uniform(1.0, 100.0),'accuracy' : random.uniform(1.0, 100.0) , 'timestamp' : datetime.datetime.now()}
