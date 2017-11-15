@@ -38,7 +38,7 @@ def producer(q,event_id,vertex,cluster_id):
     # the main thread will put new events to the queue
 
     t_end = time.time() + (60 * minutes)
-
+    print minutes
     _frequency = 1.0 if vertex is "RGBEvent" else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     frequency = float(sys.argv[2]) #Herz
 
-    minutes = float(sys.argv[3])
+    minutes = int(sys.argv[3])
 
     blob_flag = True if(sys.argv[4] == "1") else False
 

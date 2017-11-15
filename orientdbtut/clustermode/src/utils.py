@@ -96,3 +96,26 @@ def setup_logger(name, log_file, level=logging.INFO):
     logger.addHandler(handler)
 
     return logger
+
+def get_query(query_id):
+    if query_id is 0:
+        # get rgb events for last 10 seconds
+        current_time = datetime.datetime.now()
+        start_time_range = (current_time - datetime.timedelta(seconds=10)).strftime('%Y-%m-%d %H:%M:%S')
+        end_time_range = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        query = "select  image_base64,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+                where @class = 'RGBEvent' and timestamp between "\
+                +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"'"
+    elif query_id is 1:
+        #get first 10 PoseEvents generated today
+        start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time()).strftime('%Y-%m-%d %H:%M:%S')
+        end_time_range = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        query = "select  x,y,z,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+                where @class = 'PoseEvent' and timestamp between "\
+                +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"' LIMIT 10"
+    elif query_id is 2:
+        #get first 10 PoseEvents generated today
+        query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+                where @class = 'LocationEvent' and latitude > 30 and longitude < '50'"
+                
+    return query
