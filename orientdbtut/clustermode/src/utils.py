@@ -1,8 +1,14 @@
 import pyorient
 import random
 import datetime
+import logging
+
+fileHandle = open ( 'big_image_base64_2MB.txt', 'r' )
+big_image_base64 = fileHandle.read()
+fileHandle.close()
 
 big_image_base64_path = "/var/data/big_image_base64.txt"
+blob_flag = True
 
 def db_connect():
     client = pyorient.OrientDB("localhost", 2424)
@@ -77,4 +83,17 @@ def get_event(event_id):
         return {'x' : random.uniform(1.0, 100.0),'y' : random.uniform(1.0, 100.0),
                       'z' : random.uniform(1.0, 100.0),'theta' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
     elif event_id == 4:
-        return {'image_base64':big_image_base64_path, 'timestamp' : datetime.datetime.now()}
+        return {'image_base64': (big_image_base64 if blob_flag else big_image_base64_path), 'timestamp' : datetime.datetime.now()}
+
+def setup_logger(name, log_file, level=logging.INFO):
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    """Function setup as many loggers as you want"""
+
+    handler = logging.FileHandler(log_file)
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger

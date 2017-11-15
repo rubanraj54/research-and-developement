@@ -38,6 +38,7 @@ do
   echo -e "      - \$HOME/orientdb/databases$i:/orientdb/databases" >> $DOCKER_FILE_NAME
   # echo -e "      - \$HOME/orientdb/config$i/default-distributed-db-config.json:/orientdb/config/default-distributed-db-config.json" >> $DOCKER_FILE_NAME
   echo -e "      - \$HOME/orientdb/backup$i:/orientdb/backup" >> $DOCKER_FILE_NAME
+  echo -e "      - \$HOME/Desktop/logs/orientdb/executionlogs$i:/var/executionlogs/" >> $DOCKER_FILE_NAME
   echo -e "      - \$PWD/src:/src" >> $DOCKER_FILE_NAME
   echo -e "    environment:" >> $DOCKER_FILE_NAME
   echo -e "      - ORIENTDB_NODE_NAME=node$i" >> $DOCKER_FILE_NAME

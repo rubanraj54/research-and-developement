@@ -9,6 +9,7 @@ services:
     volumes:
       - $HOME/orientdb/databases1:/orientdb/databases
       - $HOME/orientdb/backup1:/orientdb/backup
+      - $HOME/Desktop/logs/orientdb/executionlogs1:/var/executionlogs/
       - $PWD/src:/src
     environment:
       - ORIENTDB_NODE_NAME=node1
@@ -22,6 +23,7 @@ services:
     volumes:
       - $HOME/orientdb/databases2:/orientdb/databases
       - $HOME/orientdb/backup2:/orientdb/backup
+      - $HOME/Desktop/logs/orientdb/executionlogs2:/var/executionlogs/
       - $PWD/src:/src
     environment:
       - ORIENTDB_NODE_NAME=node2
@@ -35,6 +37,7 @@ services:
     volumes:
       - $HOME/orientdb/databases3:/orientdb/databases
       - $HOME/orientdb/backup3:/orientdb/backup
+      - $HOME/Desktop/logs/orientdb/executionlogs3:/var/executionlogs/
       - $PWD/src:/src
     environment:
       - ORIENTDB_NODE_NAME=node3

@@ -3,13 +3,20 @@ import datetime
 import threading
 import Queue
 import sys
-import logging
 import timeit
+import logging
 
 from utils import *
 
-frequency = 120.0 #Herz
-minutes = 30
+frequency = 30.0 #Herz
+minutes = 1
+
+logging.basicConfig(filename="/var/executionlogs/QE_orientdb_robot_id_1_"+("wb_" if blob_flag else "")+datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+".log",
+                            filemode='a',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.INFO)
+
 
 def makerelation(robot_id,relation_ship_queue):
     _client = db_connect()
@@ -20,28 +27,43 @@ def makerelation(robot_id,relation_ship_queue):
 
 def consume(q,robot_id,relation_ship_queue):
     _client = db_connect()
+    # _logger = setup_logger('query_execution_logger', "/var/executionlogs/QE_orientdb_robot_id_1"+time_stamp_log_file+".log")
     while(True):
         event,vertex,cluster_id = q.get()
+
+        start_time = timeit.default_timer()
         stored_event = create_event(cluster_id,'@'+vertex,event,_client)
+        end_time = timeit.default_timer()
+
+        logging.info("Robot_id: " + robot_id +" Event : "+vertex +" " + str(end_time - start_time) + " sec ")
+
         relation_ship_queue.put(stored_event)
         q.task_done()
+    running_status = False
 
 def producer(q,event_id,vertex,cluster_id):
     # the main thread will put new events to the queue
 
-    t_end = time.time() + (2 * 1)
+    t_end = time.time() + (60 * minutes)
+    
+    _frequency = 1.0 if vertex is "RGBEvent" else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        # start_time = timeit.default_timer()
         event = get_event(event_id)
-        # end_time = timeit.default_timer()
-        # timestamp = datetime.datetime.now()
         q.put((event,vertex,cluster_id))
-        # logging.info("Robot_id: " + robot_id +" Event_id: "+event.name +" " + str(end_time - start_time) + " sec")
-        time.sleep(1/frequency)
+        time.sleep(1.0/_frequency)
 
     q.join()
     print "produced all events"
+
+def dbsizelogger(robot_id):
+    _client = db_connect()
+    # _logger = setup_logger('db_size_logger', "/var/executionlogs/DB_size_robot_id_1"+time_stamp_log_file+".log")
+    while running_status is True:
+        size = _client.db_size()
+        logging.info("Robot_id: " + robot_id +" DB size : "+ str(size))
+        time.sleep(1)
+
 
 if __name__ == '__main__':
 
@@ -54,6 +76,10 @@ if __name__ == '__main__':
     init_verteces(client)
     init_edges(client)
     root = init_root_vertex(robot_id,client)
+
+    running_status = True
+
+    time_stamp_log_file = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
     verteces = ['LocationEvent','HandleBarVoltageEvent',
     'MototBarVoltageEvent','PoseEvent','RGBEvent']
@@ -80,6 +106,11 @@ if __name__ == '__main__':
     relation_ship_thread = threading.Thread(name = "relation_ship_thread-", target=makerelation, args=(robot_id,relation_ship_queue,))
     relation_ship_thread.daemon = True
     relation_ship_thread.start()
+
+    # Thread to log database growth
+    db_size_log_thread = threading.Thread(name = "db_size_logger_thread-", target=dbsizelogger, args=(robot_id,))
+    db_size_log_thread.daemon = True
+    db_size_log_thread.start()
 
     q.join()
     relation_ship_queue.join()
