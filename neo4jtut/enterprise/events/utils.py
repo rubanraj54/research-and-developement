@@ -1,5 +1,6 @@
 from events import *
 import random
+import datetime
 
 random.seed(9001)
 
@@ -50,22 +51,32 @@ def check_possibility(datetime,_robot_id):
 
     return millisecond
 
+def init_root_node(_robot_id):
+    root = Root.nodes.get_or_none(name="root",robot_id=_robot_id)
+    if root is None:
+        root = Root(name="root",robot_id=_robot_id).save()
+    return root
 
-def add_event(event,timestamp,robot_id):
-    millisecond = check_possibility(timestamp,robot_id)
-    event.millisecond.connect(millisecond)
+def create_relation(root,event):
+    event.root.connect(root)
 
-def get_event(event_id):
+def add_event(event,robot_id):
+    return event.save()
+    # millisecond = check_possibility(timestamp,robot_id)
+    # event.millisecond.connect(millisecond)
+
+def get_event(event_id,blob_flag):
     if event_id == 1:
         return LocationEvent(latitude = random.uniform(1.0, 100.0),longitude = random.uniform(1.0, 100.0),
-                      offset = random.uniform(1.0, 100.0),accuracy = random.uniform(1.0, 100.0)).save()
+                      offset = random.uniform(1.0, 100.0),accuracy = random.uniform(1.0, 100.0),timestamp = datetime.datetime.now())
     elif event_id == 2:
-        return HandleBarVoltageEvent(voltage = random.uniform(1.0, 100.0)).save()
+        return HandleBarVoltageEvent(voltage = random.uniform(1.0, 100.0),timestamp = datetime.datetime.now())
     elif event_id == 3:
         return MototBarVoltageEvent(motor_id = random.randint(1, 10),voltage = random.uniform(1.0, 100.0),
-                      current = random.uniform(1.0, 100.0)).save()
+                      current = random.uniform(1.0, 100.0),timestamp = datetime.datetime.now())
     elif event_id == 4:
         return PoseEvent(x = random.uniform(1.0, 100.0),y = random.uniform(1.0, 100.0),
-                      z = random.uniform(1.0, 100.0),theta = random.uniform(1.0, 100.0)).save()
+                      z = random.uniform(1.0, 100.0),theta = random.uniform(1.0, 100.0),
+                      timestamp = datetime.datetime.now())
     elif event_id == 5:
-        return RGBEvent(image_base64=big_image_base64_path).save()
+        return RGBEvent(image_base64=(big_image_base64 if blob_flag else big_image_base64_path),timestamp = datetime.datetime.now())

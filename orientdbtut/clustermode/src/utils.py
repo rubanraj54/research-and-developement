@@ -84,6 +84,7 @@ def get_event(event_id,blob_flag):
     elif event_id == 4:
         return {'image_base64': (big_image_base64 if blob_flag else big_image_base64_path), 'timestamp' : datetime.datetime.now()}
 
+# this function is not used anywhere
 def setup_logger(name, log_file, level=logging.INFO):
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     """Function setup as many loggers as you want"""
@@ -117,5 +118,5 @@ def get_query(query_id):
         #get first 10 PoseEvents generated today
         query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
                 where @class = 'LocationEvent' and latitude > 30 and longitude < '50'"
-                
+
     return query

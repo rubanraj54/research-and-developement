@@ -19,7 +19,7 @@ services:
       - NEO4J_ha_serverId=1
       - NEO4J_ha_host_coordination=neorobot1:5001
       - NEO4J_ha_host_data=neorobot1:6001
-      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001, neorobot4:5001,
+      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001,
       - NEO4J_dbms_memory_heap_maxSize=2G
   neorobot2:
     image: neo-robot:latest
@@ -39,7 +39,7 @@ services:
       - NEO4J_ha_serverId=2
       - NEO4J_ha_host_coordination=neorobot2:5001
       - NEO4J_ha_host_data=neorobot2:6001
-      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001, neorobot4:5001,
+      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001,
       - NEO4J_dbms_memory_heap_maxSize=2G
     depends_on:
       - neorobot1
@@ -61,32 +61,10 @@ services:
       - NEO4J_ha_serverId=3
       - NEO4J_ha_host_coordination=neorobot3:5001
       - NEO4J_ha_host_data=neorobot3:6001
-      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001, neorobot4:5001,
+      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001,
       - NEO4J_dbms_memory_heap_maxSize=2G
     depends_on:
       - neorobot2
-  neorobot4:
-    image: neo-robot:latest
-    ports:
-      - 7478:7474
-      - 7691:7687
-    volumes:
-      - $HOME/neo4j-enterprise/logs4:/logs
-      - $HOME/neo4j-enterprise/data4:/data
-      - $HOME/neo4j-enterprise/tmp4:/var/tmp/
-      - $PWD/events:/events
-    hostname: neorobot4
-    networks:
-      - cluster
-    environment:
-      - NEO4J_dbms_mode=HA
-      - NEO4J_ha_serverId=4
-      - NEO4J_ha_host_coordination=neorobot4:5001
-      - NEO4J_ha_host_data=neorobot4:6001
-      - NEO4J_ha_initialHosts= neorobot1:5001, neorobot2:5001, neorobot3:5001, neorobot4:5001,
-      - NEO4J_dbms_memory_heap_maxSize=2G
-    depends_on:
-      - neorobot3
 networks:
   cluster:
     driver: bridge
