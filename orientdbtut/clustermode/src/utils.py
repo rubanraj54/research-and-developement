@@ -115,7 +115,7 @@ def get_query(query_id):
                 where @class = 'PoseEvent' and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"' LIMIT 10"
     elif query_id is 2:
-        #get first 10 PoseEvents generated today
+        #get all Pose generated between certain latitude and longitude ranges
         query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
                 where @class = 'LocationEvent' and latitude > 30 and longitude < '50'"
 

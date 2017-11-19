@@ -80,3 +80,22 @@ def get_event(event_id,blob_flag):
                       timestamp = datetime.datetime.now())
     elif event_id == 5:
         return RGBEvent(image_base64=(big_image_base64 if blob_flag else big_image_base64_path),timestamp = datetime.datetime.now())
+
+def run_query(query_id):
+    if query_id is 0:
+        # get rgb events for last 10 seconds
+        end_time_range = datetime.datetime.now()
+        start_time_range = (end_time_range - datetime.timedelta(seconds=10))
+        return RGBEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)
+
+    elif query_id is 1:
+        #get first 10 PoseEvents generated today
+        start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
+        end_time_range = datetime.datetime.now()
+        return PoseEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
+
+    elif query_id is 2:
+        #get all Pose generated between certain latitude and longitude ranges
+        return LocationEvent.nodes.filter(latitude__gt=30).filter(longitude__lt=50)
+
+    return None

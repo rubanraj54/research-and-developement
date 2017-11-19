@@ -9,7 +9,7 @@ services:
     volumes:
       - $HOME/neo4j-enterprise/logs1:/logs
       - $HOME/neo4j-enterprise/data1:/data
-      - $HOME/neo4j-enterprise/tmp1:/var/tmp/
+      - $HOME/Desktop/logs/neo4j/executionlogs1:/var/executionlogs/
       - $PWD/events:/events
     hostname: neorobot1
     networks:
@@ -29,7 +29,7 @@ services:
     volumes:
       - $HOME/neo4j-enterprise/logs2:/logs
       - $HOME/neo4j-enterprise/data2:/data
-      - $HOME/neo4j-enterprise/tmp2:/var/tmp/
+      - $HOME/Desktop/logs/neo4j/executionlogs2:/var/executionlogs/
       - $PWD/events:/events
     hostname: neorobot2
     networks:
@@ -51,7 +51,7 @@ services:
     volumes:
       - $HOME/neo4j-enterprise/logs3:/logs
       - $HOME/neo4j-enterprise/data3:/data
-      - $HOME/neo4j-enterprise/tmp3:/var/tmp/
+      - $HOME/Desktop/logs/neo4j/executionlogs3:/var/executionlogs/
       - $PWD/events:/events
     hostname: neorobot3
     networks:

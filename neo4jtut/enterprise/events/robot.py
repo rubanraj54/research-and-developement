@@ -40,7 +40,7 @@ def consume(q,robot_id):
 def producer(q,event_id):
     # the main thread will put new events to the queue
 
-    t_end = time.time() + (2 * minutes)
+    t_end = time.time() + (60 * minutes)
     # produce the events for 'n' minutes
     while time.time() < t_end:
         event = get_event(event_id,blob_flag)
@@ -78,7 +78,6 @@ if __name__ == '__main__':
 
     q = Queue.Queue(maxsize = 0)
     relation_ship_queue = Queue.Queue(maxsize = 0)
-
 
     # Create number of event producer threads equal to number of events
     for i in range(1,6):

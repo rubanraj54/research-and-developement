@@ -42,7 +42,8 @@ do
   echo -e "    volumes:" >> $DOCKER_FILE_NAME
   echo -e "      - \$HOME/neo4j-enterprise/logs$i:/logs" >> $DOCKER_FILE_NAME
   echo -e "      - \$HOME/neo4j-enterprise/data$i:/data" >> $DOCKER_FILE_NAME
-  echo -e "      - \$HOME/neo4j-enterprise/tmp$i:/var/tmp/" >> $DOCKER_FILE_NAME
+  # echo -e "      - \$HOME/neo4j-enterprise/tmp$i:/var/tmp/" >> $DOCKER_FILE_NAME
+  echo -e "      - \$HOME/Desktop/logs/neo4j/executionlogs$i:/var/executionlogs/" >> $DOCKER_FILE_NAME
   echo -e "      - \$PWD/events:/events" >> $DOCKER_FILE_NAME
   echo -e "    hostname: $CONTAINER_NAME$i" >> $DOCKER_FILE_NAME
   echo -e "    networks:" >> $DOCKER_FILE_NAME
