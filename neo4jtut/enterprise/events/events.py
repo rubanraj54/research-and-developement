@@ -76,6 +76,7 @@ class PoseEvent(StructuredNode):
 
 class SpeedEvent(StructuredNode):
     name = StringProperty(index=True, default="speed_event")
+    speed_id = IntegerProperty()
     desired_speed = FloatProperty()
     measured_speed = FloatProperty()
     angular_speed = FloatProperty()

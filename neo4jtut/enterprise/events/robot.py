@@ -45,7 +45,7 @@ def producer(q,event_id):
     while time.time() < t_end:
         event = get_event(event_id,blob_flag)
         q.put(event)
-        time.sleep(1/frequency)
+        time.sleep(1.0 if (blob_flag and event_id is 5) else (1/frequency))
 
     print "produced all events"
     q.join()
@@ -92,10 +92,11 @@ if __name__ == '__main__':
         t.daemon = True
         t.start()
 
-    # single thread to make relation between root node and all generated events
-    relation_ship_thread = threading.Thread(name = "relation_ship_thread-", target=makerelation, args=(robot_id,relation_ship_queue,))
-    relation_ship_thread.daemon = True
-    relation_ship_thread.start()
+    for i in range(10):
+        # threads to make relation between root node and all generated events
+        relation_ship_thread = threading.Thread(name = "relation_ship_thread-"+str(i), target=makerelation, args=(robot_id,relation_ship_queue,))
+        relation_ship_thread.daemon = True
+        relation_ship_thread.start()
 
     q.join()
     relation_ship_queue.join()
