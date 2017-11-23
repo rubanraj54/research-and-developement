@@ -25,3 +25,5 @@ curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo
 curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7477/user/neo4j/password
 
 curl -H "Content-Type: application/json" -XPOST -d '{"password":"admin"}' -u neo4j:neo4j http://localhost:7478/user/neo4j/password
+
+number of nodes 1177523

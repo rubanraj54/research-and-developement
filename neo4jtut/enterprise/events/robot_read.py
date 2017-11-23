@@ -12,7 +12,7 @@ import os, os.path
 
 def read(robot_id,query_id):
     t_end = time.time() + (60 * minutes)
-
+    print 'read starts'
     while time.time() < t_end:
         start_time = timeit.default_timer()
         result = run_query(query_id)
@@ -21,6 +21,7 @@ def read(robot_id,query_id):
         logging.info("Robot_id: " + robot_id +" Query_id : "+str(query_id) +" " + str(end_time - start_time) + " sec ")
 
         time.sleep(1.0/frequency)
+    print 'read ends'
 
 
 if __name__ == '__main__':
@@ -31,16 +32,13 @@ if __name__ == '__main__':
 
     minutes = int(sys.argv[3])
 
-    blob_flag = True if(sys.argv[4] == "1") else False
-
-    usecase_name = sys.argv[5]
+    usecase_name = sys.argv[4]
 
 
-    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"+ \
-    ("withblob/" if blob_flag else "withoutblob/")
+    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
-    str(frequency)+"hz_"+("withblob.log" if blob_flag else "withoutblob.log")
+    str(frequency)+"_hz"
 
     if not os.path.exists(filepath):
         os.makedirs(filepath)
@@ -53,7 +51,7 @@ if __name__ == '__main__':
 
     read_threads = []
     # single thread to make relation between root node and all generated events
-    for i in range(3):
+    for i in range(4):
         read_thread = threading.Thread(name = "read_thread-"+str(i), target=read, args=(robot_id,i))
         read_thread.daemon = True
         read_thread.start()

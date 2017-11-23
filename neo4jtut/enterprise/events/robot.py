@@ -29,11 +29,11 @@ def makerelation(robot_id,relation_ship_queue):
 def consume(q,robot_id):
     while(True):
         # name = threading.currentThread().getName()
-        event = q.get();
+        event,event_id = q.get();
         start_time = timeit.default_timer()
         stored_event = add_event(event,robot_id)
         end_time = timeit.default_timer()
-        logging.info("Robot_id: " + robot_id +" Event_id: "+event.name +" " + str(end_time - start_time) + " sec")
+        logging.info("Robot_id: " + robot_id +" Event_id: "+str(event_id) +" " + str(end_time - start_time) + " sec")
         relation_ship_queue.put(stored_event)
         q.task_done()
 
@@ -43,9 +43,9 @@ def producer(q,event_id):
     t_end = time.time() + (60 * minutes)
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        event = get_event(event_id,blob_flag)
-        q.put(event)
-        time.sleep(1.0 if (blob_flag and event_id is 5) else (1/frequency))
+        event = get_event(event_id)
+        q.put((event,event_id))
+        time.sleep(1.0 if (event_id is 6) else (1/frequency))
 
     print "produced all events"
     q.join()
@@ -57,15 +57,12 @@ if __name__ == '__main__':
 
     minutes = int(sys.argv[3])
 
-    blob_flag = True if(sys.argv[4] == "1") else False
+    usecase_name = sys.argv[4]
 
-    usecase_name = sys.argv[5]
-
-    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"+ \
-                ("withblob/" if blob_flag else "withoutblob/")
+    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
-            str(frequency)+"hz_"+("withblob.log" if blob_flag else "withoutblob.log")
+            str(frequency)+"_hz"
 
     if not os.path.exists(filepath):
         os.makedirs(filepath)
@@ -80,7 +77,7 @@ if __name__ == '__main__':
     relation_ship_queue = Queue.Queue(maxsize = 0)
 
     # Create number of event producer threads equal to number of events
-    for i in range(1,6):
+    for i in range(1,7):
         event_id = i
         t = threading.Thread(name = "ProducerThread-"+str(i), target=producer, args=(q,event_id,))
         t.start()
@@ -92,11 +89,9 @@ if __name__ == '__main__':
         t.daemon = True
         t.start()
 
-    for i in range(10):
-        # threads to make relation between root node and all generated events
-        relation_ship_thread = threading.Thread(name = "relation_ship_thread-"+str(i), target=makerelation, args=(robot_id,relation_ship_queue,))
-        relation_ship_thread.daemon = True
-        relation_ship_thread.start()
+    relation_ship_thread = threading.Thread(name = "relation_ship_thread-", target=makerelation, args=(robot_id,relation_ship_queue,))
+    relation_ship_thread.daemon = True
+    relation_ship_thread.start()
 
     q.join()
     relation_ship_queue.join()

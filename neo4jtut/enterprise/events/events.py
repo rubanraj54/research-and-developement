@@ -1,4 +1,4 @@
-from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,
+from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,BooleanProperty,
     UniqueIdProperty, RelationshipTo, RelationshipFrom,cardinality,FloatProperty,DateTimeProperty)
 
 config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
@@ -93,4 +93,5 @@ class RGBEvent(StructuredNode):
     name = StringProperty(index=True, default="rgb_event")
     timestamp = DateTimeProperty()
     image_base64 = StringProperty()
+    blob = BooleanProperty()
     root = RelationshipTo('Root', 'EVENT_AT')
