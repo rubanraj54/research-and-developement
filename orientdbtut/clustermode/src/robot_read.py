@@ -31,16 +31,13 @@ if __name__ == '__main__':
 
     minutes = int(sys.argv[3])
 
-    blob_flag = True if(sys.argv[4] == "1") else False
-
-    usecase_name = sys.argv[5]
+    usecase_name = sys.argv[4]
 
 
-    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"+ \
-    ("withblob/" if blob_flag else "withoutblob/")
+    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
-    str(frequency)+"hz_"+("withblob.log" if blob_flag else "withoutblob.log")
+    str(frequency)+"_hz.log"
 
     if not os.path.exists(filepath):
         os.makedirs(filepath)
@@ -53,7 +50,7 @@ if __name__ == '__main__':
 
     read_threads = []
     # single thread to make relation between root node and all generated events
-    for i in range(3):
+    for i in range(4):
         client = db_connect()
         read_thread = threading.Thread(name = "read_thread-"+str(i), target=read, args=(robot_id,client,i))
         read_thread.daemon = True

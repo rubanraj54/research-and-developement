@@ -22,13 +22,13 @@ def consume(q,robot_id,relation_ship_queue):
     _client = db_connect()
     # _logger = setup_logger('query_execution_logger', "/var/executionlogs/QE_orientdb_robot_id_1"+time_stamp_log_file+".log")
     while(True):
-        event,vertex,cluster_id = q.get()
+        event,vertex,cluster_id,event_id = q.get()
 
         start_time = timeit.default_timer()
         stored_event = create_event(cluster_id,'@'+vertex,event,_client)
         end_time = timeit.default_timer()
 
-        logging.info("Robot_id: " + robot_id +" Event : "+vertex +" " + str(end_time - start_time) + " sec ")
+        logging.info("Robot_id: " + robot_id +" Event : "+str(event_id) +" " + str(end_time - start_time) + " sec ")
 
         relation_ship_queue.put(stored_event)
         q.task_done()
@@ -38,12 +38,11 @@ def producer(q,event_id,vertex,cluster_id):
     # the main thread will put new events to the queue
 
     t_end = time.time() + (60 * minutes)
-    print minutes
-    _frequency = 1.0 if vertex is "RGBEvent" else frequency
+    _frequency = 1.0 if (vertex is "RGBEvent" and event_id is 5) else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        event = get_event(event_id,blob_flag)
-        q.put((event,vertex,cluster_id))
+        event = get_event(event_id)
+        q.put((event,vertex,cluster_id,event_id))
         time.sleep(1.0/_frequency)
 
     q.join()
@@ -66,15 +65,12 @@ if __name__ == '__main__':
 
     minutes = int(sys.argv[3])
 
-    blob_flag = True if(sys.argv[4] == "1") else False
+    usecase_name = sys.argv[4]
 
-    usecase_name = sys.argv[5]
-
-    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"+ \
-                ("withblob/" if blob_flag else "withoutblob/")
+    filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
-            str(frequency)+"hz_"+("withblob.log" if blob_flag else "withoutblob.log")
+            str(frequency)+"_hz.log"
 
     if not os.path.exists(filepath):
         os.makedirs(filepath)
@@ -98,7 +94,7 @@ if __name__ == '__main__':
     time_stamp_log_file = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
     verteces = ['LocationEvent','HandleBarVoltageEvent',
-    'MototBarVoltageEvent','PoseEvent','RGBEvent']
+    'MototBarVoltageEvent','PoseEvent','RGBEvent','RGBEvent']
 
     cluster_ids = get_cluster_ids(verteces,client)
 
@@ -106,7 +102,7 @@ if __name__ == '__main__':
     relation_ship_queue = Queue.Queue(maxsize = 0)
 
     # Create number of event producer threads equal to number of events
-    for i in range(len(verteces)):
+    for i in range(0,6):
         event_id = i
         t = threading.Thread(name = "ProducerThread-"+str(i), target=producer, args=(q,event_id,verteces[i],cluster_ids[i],))
         t.daemon = True

@@ -69,7 +69,7 @@ def create_relation(event,_client,robot_id):
     ")"
     )
 
-def get_event(event_id,blob_flag):
+def get_event(event_id):
     if event_id == 0:
         return {'latitude' : random.uniform(1.0, 100.0),'longitude' : random.uniform(1.0, 100.0),
                       'offset' : random.uniform(1.0, 100.0),'accuracy' : random.uniform(1.0, 100.0) , 'timestamp' : datetime.datetime.now()}
@@ -82,7 +82,16 @@ def get_event(event_id,blob_flag):
         return {'x' : random.uniform(1.0, 100.0),'y' : random.uniform(1.0, 100.0),
                       'z' : random.uniform(1.0, 100.0),'theta' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
     elif event_id == 4:
-        return {'image_base64': (big_image_base64 if blob_flag else big_image_base64_path), 'timestamp' : datetime.datetime.now()}
+        # storing the blob file path
+        return {'image_base64': big_image_base64_path, 'blob' : False, 'timestamp' : datetime.datetime.now()}
+
+    elif event_id == 5:
+        # storing the blob file
+        return {'image_base64': big_image_base64 , 'blob' : True, 'timestamp' : datetime.datetime.now()}
+
+    elif event_id == 6:
+        return {'speed_id': 1 , 'desired_speed' : random.uniform(1.0, 100.0), 'measured_speed' : random.uniform(1.0, 100.0),
+                'angular_speed' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
 
 # this function is not used anywhere
 def setup_logger(name, log_file, level=logging.INFO):
@@ -100,21 +109,32 @@ def setup_logger(name, log_file, level=logging.INFO):
 
 def get_query(query_id):
     if query_id is 0:
-        # get rgb events for last 10 seconds
+        # get rgb events(without blob) for last 10 seconds
         current_time = datetime.datetime.now()
         start_time_range = (current_time - datetime.timedelta(seconds=10)).strftime('%Y-%m-%d %H:%M:%S')
         end_time_range = current_time.strftime('%Y-%m-%d %H:%M:%S')
-        query = "select  image_base64,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
-                where @class = 'RGBEvent' and timestamp between "\
+        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+                where @class = 'RGBEvent' and blob = false and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"'"
-    elif query_id is 1:
+
+    if query_id is 1:
+        # get rgb events(with blob) for last 10 seconds
+        current_time = datetime.datetime.now()
+        start_time_range = (current_time - datetime.timedelta(seconds=10)).strftime('%Y-%m-%d %H:%M:%S')
+        end_time_range = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+                where @class = 'RGBEvent' and blob = true and timestamp between "\
+                +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"'"
+
+    elif query_id is 2:
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time()).strftime('%Y-%m-%d %H:%M:%S')
         end_time_range = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         query = "select  x,y,z,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
                 where @class = 'PoseEvent' and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"' LIMIT 10"
-    elif query_id is 2:
+
+    elif query_id is 3:
         #get all Pose generated between certain latitude and longitude ranges
         query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
                 where @class = 'LocationEvent' and latitude > 30 and longitude < '50'"

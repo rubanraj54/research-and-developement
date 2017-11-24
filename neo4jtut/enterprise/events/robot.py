@@ -62,7 +62,7 @@ if __name__ == '__main__':
     filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
-            str(frequency)+"_hz"
+            str(frequency)+"_hz.log"
 
     if not os.path.exists(filepath):
         os.makedirs(filepath)

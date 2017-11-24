@@ -32,7 +32,11 @@ if __name__ == '__main__':
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
+    ### init db
+    client = db_connect()
 
+    root = init_root_vertex(robot_id,client)
+    
     for speed_event in SpeedEvent.nodes:
         speed_event.delete()
 
