@@ -4,3 +4,5 @@
 orientdbtut/clustermode/\.ipynb_checkpoints/
 
 *.py~
+
+.ipynb_checkpoints
