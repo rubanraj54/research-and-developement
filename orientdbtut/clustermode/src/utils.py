@@ -3,7 +3,7 @@ import random
 import datetime
 import logging
 
-fileHandle = open ( 'big_image_base64_2MB.txt', 'r' )
+fileHandle = open ( 'big_image_base64.txt', 'r' )
 big_image_base64 = fileHandle.read()
 fileHandle.close()
 
@@ -71,27 +71,33 @@ def create_relation(event,_client,robot_id):
 
 def get_event(event_id):
     if event_id == 0:
+        # return "insert into LocationEvent set latitude="+str(random.uniform(1.0, 100.0))+",longitude="+str(random.uniform(1.0, 100.0))+",offset="+str(random.uniform(1.0, 100.0)) \
+        #         +",accuracy="+str(random.uniform(1.0, 100.0))+",timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'latitude' : random.uniform(1.0, 100.0),'longitude' : random.uniform(1.0, 100.0),
-                      'offset' : random.uniform(1.0, 100.0),'accuracy' : random.uniform(1.0, 100.0) , 'timestamp' : datetime.datetime.now()}
+                      'offset' : random.uniform(1.0, 100.0),'accuracy' : random.uniform(1.0, 100.0) ,
+                      'timestamp' : datetime.datetime.now()}
     elif event_id == 1:
+        # return "insert into HandleBarVoltageEvent set voltage="+str(random.uniform(1.0, 100.0))+",timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'voltage' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
     elif event_id == 2:
+        # return "insert into MototBarVoltageEvent set motor_id="+str(random.randint(1, 10))+",voltage="+str(random.uniform(1.0, 100.0))+",current="+str(random.uniform(1.0, 100.0)) \
+        #         +",timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'motor_id' : random.randint(1, 10),'voltage' : random.uniform(1.0, 100.0),
                       'current' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
     elif event_id == 3:
+        # return "insert into PoseEvent set x="+str(random.uniform(1.0, 100.0))+",y="+str(random.uniform(1.0, 100.0))+",z="+str(random.uniform(1.0, 100.0)) \
+        #         +",timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'x' : random.uniform(1.0, 100.0),'y' : random.uniform(1.0, 100.0),
                       'z' : random.uniform(1.0, 100.0),'theta' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
     elif event_id == 4:
         # storing the blob file path
+        # return "insert into RGBEvent set image_base64=\""+big_image_base64_path+"\",blob=false,timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'image_base64': big_image_base64_path, 'blob' : False, 'timestamp' : datetime.datetime.now()}
 
     elif event_id == 5:
         # storing the blob file
+        # return "insert into RGBEvent set image_base64=\""+big_image_base64+"\",blob=true,timestamp=DATE(\""+str(datetime.datetime.now())+"\")"
         return {'image_base64': big_image_base64 , 'blob' : True, 'timestamp' : datetime.datetime.now()}
-
-    elif event_id == 6:
-        return {'speed_id': 1 , 'desired_speed' : random.uniform(1.0, 100.0), 'measured_speed' : random.uniform(1.0, 100.0),
-                'angular_speed' : random.uniform(1.0, 100.0), 'timestamp' : datetime.datetime.now()}
 
 # this function is not used anywhere
 def setup_logger(name, log_file, level=logging.INFO):

@@ -32,22 +32,22 @@ if __name__ == '__main__':
                         format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
-    ### init db
+
     client = db_connect()
 
+    init_verteces(client)
+    init_edges(client)
     root = init_root_vertex(robot_id,client)
-    
-    for speed_event in SpeedEvent.nodes:
-        speed_event.delete()
+
+    client.command("delete vertex SpeedEvent")
 
     # if mode is 1 do write process
     if mode is "1":
         for i in range(100):
             _timestamp = datetime.datetime.now()
-            SpeedEvent(speed_id = i,desired_speed = random.uniform(1.0, 100.0),
-            measured_speed = random.uniform(1.0, 100.0),angular_speed = random.uniform(1.0, 100.0),
-            timestamp = _timestamp).save()
-
+            event_query = "insert into SpeedEvent set speed_id="+str(i)+",measured_speed=24.3453,angular_speed=32.234,timestamp=DATE(\""+str(_timestamp)+"\")"
+            # print client.command(event_query)[0]._rid
+            # break
             logging.info("replica_test_write robot_id " + robot_id +" event_id "+ str(i) +" timestamp "+str(_timestamp))
     # if mode is 2, check nodes are replicated in other robot
     else:
@@ -56,6 +56,6 @@ if __name__ == '__main__':
             speed_ids_copy = speed_ids
             for _speed_id in speed_ids_copy:
                 #if a node is found in other robot (means replicated), then remove its id from array
-                if SpeedEvent.nodes.get_or_none(speed_id=_speed_id) is not None:
+                if len(client.command("select * from SpeedEvent where speed_id=" + str(_speed_id))) > 0:
                     logging.info("replica_test_read robot_id " + robot_id +" event_id "+ str(_speed_id) +" timestamp "+str(datetime.datetime.now()))
                     speed_ids.remove(_speed_id)

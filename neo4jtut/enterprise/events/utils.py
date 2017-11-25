@@ -62,8 +62,6 @@ def create_relation(root,event):
 
 def add_event(event,robot_id):
     return event.save()
-    # millisecond = check_possibility(timestamp,robot_id)
-    # event.millisecond.connect(millisecond)
 
 def get_event(event_id):
     if event_id == 1:
