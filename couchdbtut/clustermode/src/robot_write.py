@@ -31,7 +31,7 @@ def producer(q,event_id):
     _frequency = 1.0 if (event_id is 5) else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:
-        event = get_event(event_id)
+        event = get_event(event_id,robot_id)
         q.put((event,event_id))
         time.sleep(1.0/_frequency)
     q.join()
