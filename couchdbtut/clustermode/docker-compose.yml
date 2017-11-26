@@ -1,0 +1,61 @@
+version: '2'
+
+services:
+  couchdbrobot1:
+    image: couchdb-robot:latest
+    environment:
+      - NODENAME=couchdbrobot1
+      - COUCHDB_COOKIE=mycookie
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+      - COUCHDB_SECRET=mysecret
+    ports:
+      - "15984:5984"
+    volumes:
+      - $HOME/Desktop/logs/couchdb/executionlogs1:/var/executionlogs/
+      - $PWD/src:/src
+
+  setup:
+    build: .
+    volumes:
+      - .:/src
+    command: bash -c "/src/wait-for-it.sh couchdbrobot1:5984 -t 300 -- curl -X PUT http://admin:admin@couchdbrobot1:5984/_users && curl -X PUT http://admin:admin@couchdbrobot1:5984/_global_changes && curl -X PUT http://admin:admin@couchdbrobot1:5984/_replicator && curl -X PUT http://admin:admin@couchdbrobot1:5986/_nodes/couchdb@couchdbrobot2 -d {} && curl -X PUT http://admin:admin@couchdbrobot1:5986/_nodes/couchdb@couchdbrobot3 -d {}"
+    depends_on:
+      - couchdbrobot1
+
+  couchdbrobot2:
+    image: couchdb-robot:latest
+    environment:
+      - NODENAME=couchdbrobot2
+      - COUCHDB_COOKIE=mycookie
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+      - COUCHDB_SYNC_ADMINS_NODE=couchdbrobot1
+      - COUCHDB_SECRET=mysecret
+    ports:
+      - "25984:5984"
+    volumes:
+      - $HOME/Desktop/logs/couchdb/executionlogs2:/var/executionlogs/
+      - $PWD/src:/src
+
+  couchdbrobot3:
+    image: couchdb-robot:latest
+    environment:
+      - NODENAME=couchdbrobot3
+      - COUCHDB_COOKIE=mycookie
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=admin
+      - COUCHDB_SYNC_ADMINS_NODE=couchdbrobot1
+      - COUCHDB_SECRET=mysecret
+    ports:
+      - "35984:5984"
+    volumes:
+      - $HOME/Desktop/logs/couchdb/executionlogs3:/var/executionlogs/
+      - $PWD/src:/src
+
+  haproxy:
+    image: haproxy:1.7.3
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+    ports:
+      - "5984:5984"
