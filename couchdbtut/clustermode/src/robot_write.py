@@ -38,8 +38,6 @@ def producer(q,event_id):
 
     print "produced all events"
 
-
-
 if __name__ == '__main__':
 
     robot_id = sys.argv[1]
@@ -49,6 +47,8 @@ if __name__ == '__main__':
     minutes = int(sys.argv[3])
 
     usecase_name = sys.argv[4]
+
+    print datetime.datetime.now()
 
     filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 

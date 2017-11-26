@@ -7,13 +7,13 @@ class LocationEvent(Document):
     longitude = FloatField()
     offset = FloatField()
     accuracy = FloatField()
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
 
 class HandleBarVoltageEvent(Document):
     robot_id = IntegerField()
     name = TextField(default="handle_bar_voltage_event")
     voltage = FloatField()
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
 
 class MotorBarVoltageEvent(Document):
     robot_id = IntegerField()
@@ -21,7 +21,7 @@ class MotorBarVoltageEvent(Document):
     motor_id = IntegerField()
     voltage = FloatField()
     current = FloatField()
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
 
 class PoseEvent(Document):
     robot_id = IntegerField()
@@ -30,7 +30,7 @@ class PoseEvent(Document):
     y = FloatField()
     z = FloatField()
     theta = FloatField()
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
 
 class SpeedEvent(Document):
     robot_id = IntegerField()
@@ -39,17 +39,17 @@ class SpeedEvent(Document):
     desired_speed = FloatField()
     measured_speed = FloatField()
     angular_speed = FloatField()
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
 
 class DistanceLogEvent(Document):
     robot_id = IntegerField()
     name = TextField(default="distance_log_event")
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
     travelled_log = TextField()
 
 class RGBEvent(Document):
     robot_id = IntegerField()
     name = TextField(default="rgb_event")
-    timestamp = DateTimeField()
+    timestamp = IntegerField()
     image_base64 = TextField()
     blob = BooleanField()

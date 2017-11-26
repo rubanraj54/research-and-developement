@@ -107,3 +107,21 @@ def run_query(query_id):
         return LocationEvent.nodes.filter(latitude__gt=30).filter(longitude__lt=50)
 
     return None
+# function (doc) {
+#   t = new Date();
+#   t.setSeconds(t.getSeconds() - 10);
+#   start_time = Math.floor(t.valueOf()/1000);
+#  end_time = Math.floor(new Date().valueOf()/1000);
+#  if (doc.timestamp >= start_time &&  doc.timestamp <= current_time){
+#       emit(current_time, doc.timestamp);
+#  }
+# }
+#
+#
+# function (doc) {
+#   t = new Date();
+#   t.setSeconds(t.getSeconds() - 10);
+#   start_time = Math.floor(t.valueOf()/1000);
+#   end_time = Math.floor(new Date().valueOf()/1000);
+#       emit(start_time,end_time);
+# }

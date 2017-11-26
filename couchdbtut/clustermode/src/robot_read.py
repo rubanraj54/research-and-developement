@@ -16,9 +16,8 @@ def read(robot_id,query_id):
 
     while time.time() < t_end:
         start_time = timeit.default_timer()
-        _client.command(get_query(query_id))
+        run_read_query(query_id,db)
         end_time = timeit.default_timer()
-
         logging.info("Robot_id: " + robot_id +" Query_id : "+str(query_id) +" " + str(end_time - start_time) + " sec ")
 
         time.sleep(1.0/frequency)
@@ -34,6 +33,7 @@ if __name__ == '__main__':
 
     usecase_name = sys.argv[4]
 
+    print datetime.datetime.now()
 
     filepath = "/var/executionlogs/"+usecase_name+"/"+str(frequency)+"HZ/"
 
