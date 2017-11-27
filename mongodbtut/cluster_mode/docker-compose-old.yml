@@ -8,17 +8,18 @@ services:
     volumes:
       - $HOME/mongodb/data1:/data/db
     command: mongod --replSet ropod-replica
-  mongo_node1:
+  mongo_node2:
     image: mongo
     ports:
-      - 30001:27017
+      - 30002:27017
     volumes:
-      - $HOME/mongodb/data1:/data/db
+      - $HOME/mongodb/data2:/data/db
     command: mongod --replSet ropod-replica
-  mongo_node1:
+  mongo_node3:
     image: mongo
     ports:
-      - 30001:27017
+      - 30003:27017
     volumes:
-      - $HOME/mongodb/data1:/data/db
+      - $HOME/mongodb/data3:/data/db
     command: mongod --replSet ropod-replica
+

@@ -88,40 +88,22 @@ def run_query(query_id):
         # get rgb events(without blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
         start_time_range = (end_time_range - datetime.timedelta(seconds=10))
-        return RGBEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range).filter(blob=False)
+        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=False)
 
     elif query_id is 1:
         # get rgb events(with blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
         start_time_range = (end_time_range - datetime.timedelta(seconds=10))
-        return RGBEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range).filter(blob=True)
+        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=True)
 
     elif query_id is 2:
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
         end_time_range = datetime.datetime.now()
-        return PoseEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
+        return PoseEvent.objects().filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
 
     elif query_id is 3:
         #get all Pose generated between certain latitude and longitude ranges
-        return LocationEvent.nodes.filter(latitude__gt=30).filter(longitude__lt=50)
+        return LocationEvent.objects().filter(latitude__gt=30).filter(longitude__lt=50)
 
     return None
-# function (doc) {
-#   t = new Date();
-#   t.setSeconds(t.getSeconds() - 10);
-#   start_time = Math.floor(t.valueOf()/1000);
-#  end_time = Math.floor(new Date().valueOf()/1000);
-#  if (doc.timestamp >= start_time &&  doc.timestamp <= current_time){
-#       emit(current_time, doc.timestamp);
-#  }
-# }
-#
-#
-# function (doc) {
-#   t = new Date();
-#   t.setSeconds(t.getSeconds() - 10);
-#   start_time = Math.floor(t.valueOf()/1000);
-#   end_time = Math.floor(new Date().valueOf()/1000);
-#       emit(start_time,end_time);
-# }

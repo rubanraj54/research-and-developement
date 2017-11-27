@@ -72,6 +72,7 @@ if __name__ == '__main__':
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')+"_"+ \
             str(frequency)+"_hz.log"
 
+    print datetime.datetime.now()
     if not os.path.exists(filepath):
         os.makedirs(filepath)
 

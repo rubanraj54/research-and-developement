@@ -1,20 +1,22 @@
 #command to create seperate network for mongo cluster
 docker network create mongo-cluster-net
 
-#command to create mongo container one (node 1) 
+#command to create mongo container one (node 1)
 docker run -p 30001:27017 --name mongo_node1 --net mongo-cluster-net mongo mongod --replSet ropod-replica
 
-#command to create mongo container two (node 2) 
+#command to create mongo container two (node 2)
 docker run -p 30002:27017 --name mongo_node2 --net mongo-cluster-net mongo mongod --replSet ropod-replica
 
-#command to create mongo container three (node 3) 
+#command to create mongo container three (node 3)
 docker run -p 30003:27017 --name mongo_node3 --net mongo-cluster-net mongo mongod --replSet ropod-replica
 
 docker exec -it mongo_node1 mongo
 
 From node one:
-db = (new Mongo('localhost:27017')).getDB('test')
-config = {"_id":"ropod-replica","members":[{"_id":0,"host":"clustermode_mongo_node1_1:27017"},{"_id":1,"host":"clustermode_mongo_node2_1:27017"},{"_id":2,"host":"clustermode_mongo_node3_1:27017"}]}
+db = (new Mongo('localhost:27017')).getDB('robot')
+config = {"_id":"ropod-replica","members":[{"_id":0,"host":"mongo_node1:27017"},{"_id":1,"host":"mongo_node2:27017"},{"_id":2,"host":"mongo_node3:27017"}]}
 
 after writing the config file, we need to initiate to start replicating data of ropod-replica set
 rs.initiate(config)
+
+config = {"_id":"sensor-replica","members":[{"_id":0,"host":"clustermode_mongorobot1_1:27017"},{"_id":1,"host":"clustermode_mongodatacenter_1:27017"}]}

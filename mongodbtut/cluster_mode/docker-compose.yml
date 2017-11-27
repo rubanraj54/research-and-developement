@@ -1,25 +1,30 @@
 version: '3'
 
 services:
-  mongo_node1:
-    image: mongo
+  mongorobot1:
+    image: mongodb-robot:latest
     ports:
-      - 30001:27017
+      - 27017:27017
     volumes:
       - $HOME/mongodb/data1:/data/db
-    command: mongod --replSet ropod-replica
-  mongo_node2:
-    image: mongo
+      - $HOME/Desktop/logs/mongodb/executionlogs1:/var/executionlogs/
+      - $PWD/src:/src
+    networks:
+      - mongocluster
+    command: mongod --replSet sensor-replica
+  mongodatacenter:
+    image: mongodb-robot:latest
     ports:
       - 30002:27017
     volumes:
       - $HOME/mongodb/data2:/data/db
-    command: mongod --replSet ropod-replica
-  mongo_node3:
-    image: mongo
-    ports:
-      - 30003:27017
-    volumes:
-      - $HOME/mongodb/data3:/data/db
-    command: mongod --replSet ropod-replica
-
+      - $HOME/Desktop/logs/mongodb/executionlogs2:/var/executionlogs/
+      - $PWD/src:/src
+    networks:
+      - mongocluster
+    command: mongod --replSet sensor-replica
+    depends_on:
+      - mongorobot1
+networks:
+  mongocluster:
+    driver: bridge
