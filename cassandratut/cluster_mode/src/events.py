@@ -42,7 +42,7 @@ class SpeedEvent(Model):
     id = UUID(primary_key=True, default=uuid.uuid4)
     robot_id = Integer()
     name = Text()
-    speed_id = Integer()
+    speed_id = Integer(primary_key=True)
     desired_speed = Float()
     measured_speed = Float()
     angular_speed = Float()
