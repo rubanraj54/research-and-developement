@@ -114,12 +114,13 @@ def setup_logger(name, log_file, level=logging.INFO):
     return logger
 
 def get_query(query_id):
+    robot_id = "1"
     if query_id is 0:
         # get rgb events(without blob) for last 10 seconds
         current_time = datetime.datetime.now()
         start_time_range = (current_time - datetime.timedelta(seconds=10)).strftime('%Y-%m-%d %H:%M:%S')
         end_time_range = current_time.strftime('%Y-%m-%d %H:%M:%S')
-        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id="+robot_id+") \
                 where @class = 'RGBEvent' and blob = false and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"'"
 
@@ -128,7 +129,7 @@ def get_query(query_id):
         current_time = datetime.datetime.now()
         start_time_range = (current_time - datetime.timedelta(seconds=10)).strftime('%Y-%m-%d %H:%M:%S')
         end_time_range = current_time.strftime('%Y-%m-%d %H:%M:%S')
-        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+        query = "select  image_base64,blob,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id="+robot_id+") \
                 where @class = 'RGBEvent' and blob = true and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"'"
 
@@ -136,13 +137,13 @@ def get_query(query_id):
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time()).strftime('%Y-%m-%d %H:%M:%S')
         end_time_range = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        query = "select  x,y,z,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+        query = "select  x,y,z,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id="+robot_id+") \
                 where @class = 'PoseEvent' and timestamp between "\
                 +"'"+start_time_range+ "'"+ " and " +"'"+end_time_range+"' LIMIT 10"
 
     elif query_id is 3:
         #get all Pose generated between certain latitude and longitude ranges
-        query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id=1) \
+        query = "select  longitude,latitude,timestamp,@class from (select expand( out( Event_in )) from Root where robot_id="+robot_id+") \
                 where @class = 'LocationEvent' and latitude > 30 and longitude < '50'"
 
     return query

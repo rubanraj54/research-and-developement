@@ -10,12 +10,15 @@ from utils import *
 
 import os, os.path
 
-def read(robot_id,_client,query_id):
+def read(robot_id,query_id):
+    _client = db_connect()
     t_end = time.time() + (60 * minutes)
 
     while time.time() < t_end:
         start_time = timeit.default_timer()
+        print "start"
         _client.command(get_query(query_id))
+        print "end"
         end_time = timeit.default_timer()
 
         logging.info("Robot_id: " + robot_id +" Query_id : "+str(query_id) +" " + str(end_time - start_time) + " sec ")
@@ -48,11 +51,12 @@ if __name__ == '__main__':
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
 
+    print datetime.datetime.now()
+
     read_threads = []
     # single thread to make relation between root node and all generated events
     for i in range(4):
-        client = db_connect()
-        read_thread = threading.Thread(name = "read_thread-"+str(i), target=read, args=(robot_id,client,i))
+        read_thread = threading.Thread(name = "read_thread-"+str(i), target=read, args=(robot_id,i))
         read_thread.daemon = True
         read_thread.start()
         read_threads.append(read_thread)
