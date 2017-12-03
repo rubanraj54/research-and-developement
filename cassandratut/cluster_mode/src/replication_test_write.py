@@ -15,9 +15,6 @@ if __name__ == '__main__':
 
     usecase_name = sys.argv[2]
 
-    # mode = sys.argv[3]
-
-
     filepath = "/var/executionlogs/"+usecase_name+"/"
 
     filename = usecase_name+"_"+ datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
