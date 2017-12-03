@@ -31,10 +31,6 @@ if __name__ == '__main__':
     db = client.robot
     speed_collection = db.speed_event
 
-    for speed_event in speed_collection.find():
-        db.speed_event.remove({'speed_id':speed_event['speed_id']})
-    print "speed documents deleted successfully "
-
     speed_ids = range(100)
 
     while len(speed_ids) > 0:
