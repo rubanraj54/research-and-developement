@@ -12,7 +12,6 @@ import os, os.path
 
 def consume(q):
     db = db_init()
-    # _logger = setup_logger('query_execution_logger', "/var/executionlogs/QE_orientdb_robot_id_1"+time_stamp_log_file+".log")
     while(True):
         event,event_id = q.get()
 
@@ -27,7 +26,7 @@ def consume(q):
 def producer(q,event_id):
     # the main thread will put new events to the queue
 
-    t_end = time.time() + (10 * minutes)
+    t_end = time.time() + (60 * minutes)
     _frequency = 1.0 if (event_id is 5) else frequency
     # produce the events for 'n' minutes
     while time.time() < t_end:

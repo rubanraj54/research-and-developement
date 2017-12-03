@@ -27,8 +27,8 @@ def db_init():
     return db
 
 def collection_init(db):
-    collections = ['location_event','handle_bar_voltage_event','motor_voltage_event',
-    'pose_event','speed_event','distance_log_event','rgb_event']
+    collections = ['location_events','handle_bar_voltage_events','motor_voltage_events',
+    'pose_events','speed_events','distance_log_events','rgb_events']
 
     for collection in collections:
         try:
@@ -39,24 +39,24 @@ def collection_init(db):
 
 def create_event(db,event_id,event):
     if event_id == 0:
-        return db.collection('location_event').insert(event)
+        return db.collection('location_events').insert(event)
 
     elif event_id == 1:
-        return db.collection('handle_bar_voltage_event').insert(event)
+        return db.collection('handle_bar_voltage_events').insert(event)
 
     elif event_id == 2:
-        return db.collection('motor_voltage_event').insert(event)
+        return db.collection('motor_voltage_events').insert(event)
 
     elif event_id == 3:
-        return db.collection('pose_event').insert(event)
+        return db.collection('pose_events').insert(event)
 
     elif event_id == 4:
         # storing the blob file path
-        return db.collection('rgb_event').insert(event)
+        return db.collection('rgb_events').insert(event)
 
     elif event_id == 5:
         # storing the blob file
-        return db.collection('rgb_event').insert(event)
+        return db.collection('rgb_events').insert(event)
 
 def get_event(event_id,_robot_id):
     if event_id == 0:
