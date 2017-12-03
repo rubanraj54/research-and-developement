@@ -51,32 +51,32 @@ services:
             memlock: -1
             nproc: 32768
             nofile: 100000
-    cassandrarobot3:
-        image: cassandra-robot:latest
-        command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
-        networks:
-            - cassandracluster
-        volumes:
-            - $HOME/cassandra/data3:/var/lib/cassandra
-            - $HOME/Desktop/logs/cassandra/executionlogs3:/var/executionlogs/
-            - $PWD/src:/src
-        environment:
-            - CASSANDRA_CLUSTER_NAME= robot_cluster
-            - CASSANDRA_SEEDS=cassandrarobot1
-        depends_on:
-              - cassandrarobot1
-        ports:
-          - 39042:9042
-        expose:
-            - 7000
-            - 7001
-            - 7199
-            - 9042
-            - 9160
-        ulimits:
-            memlock: -1
-            nproc: 32768
-            nofile: 100000
+    # cassandrarobot3:
+    #     image: cassandra-robot:latest
+    #     command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
+    #     networks:
+    #         - cassandracluster
+    #     volumes:
+    #         - $HOME/cassandra/data3:/var/lib/cassandra
+    #         - $HOME/Desktop/logs/cassandra/executionlogs3:/var/executionlogs/
+    #         - $PWD/src:/src
+    #     environment:
+    #         - CASSANDRA_CLUSTER_NAME= robot_cluster
+    #         - CASSANDRA_SEEDS=cassandrarobot1
+    #     depends_on:
+    #           - cassandrarobot1
+    #     ports:
+    #       - 39042:9042
+    #     expose:
+    #         - 7000
+    #         - 7001
+    #         - 7199
+    #         - 9042
+    #         - 9160
+    #     ulimits:
+    #         memlock: -1
+    #         nproc: 32768
+    #         nofile: 100000
     # A web based interface for managing your docker containers.
     # portainer:
     #     image: portainer/portainer

@@ -11,12 +11,12 @@ from utils import *
 import os, os.path
 
 def read(robot_id,query_id):
-    db = db_init()
+    db_init()
     t_end = time.time() + (60 * minutes)
 
     while time.time() < t_end:
         start_time = timeit.default_timer()
-        run_read_query(query_id,db)
+        run_read_query(query_id)
         end_time = timeit.default_timer()
         logging.info("Robot_id: " + robot_id +" Query_id : "+str(query_id) +" " + str(end_time - start_time) + " sec ")
 
