@@ -12,7 +12,6 @@ import os, os.path
 
 def consume(q):
     db = db_init()
-    # _logger = setup_logger('query_execution_logger', "/var/executionlogs/QE_orientdb_robot_id_1"+time_stamp_log_file+".log")
     while(True):
         event,event_id = q.get()
 

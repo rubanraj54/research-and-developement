@@ -50,41 +50,29 @@ def get_event(event_id,_robot_id):
         return RGBEvent(image_base64=big_image_base64,blob=True,robot_id=_robot_id,timestamp=datetime.datetime.now())
 
 
-def run_read_query(query_id,db):
+def run_read_query(query_id):
     if query_id is 0:
         # get rgb events(without blob) for last 10 seconds
-        # function (doc) {
-        # if(doc.name=="rgb_event" && doc.blob==false){
-        # emit(doc.timestamp, doc);
-        # }
-        # }
-        return db.view("_design/robot_filters/_view/rgb_withoutblob",limit=1000,descending=True)
+        end_time_range = datetime.datetime.now()
+        start_time_range = (end_time_range - datetime.timedelta(seconds=10))
+
+        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=False)
 
     if query_id is 1:
-        # function (doc) {
-        # if(doc.name=="rgb_event" && doc.blob==true){
-        # emit(doc.timestamp, doc);
-        # }
-        # }
         # get rgb events(with blob) for last 10 seconds
-        return db.view("_design/robot_filters/_view/rgb_withblob",limit=1000,descending=True)
+        end_time_range = datetime.datetime.now()
+        start_time_range = (end_time_range - datetime.timedelta(seconds=10))
+
+        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=True)
 
     elif query_id is 2:
         #get first 10 PoseEvents generated today
-        # function (doc) {
-        # if(doc.name=="pose_event"){
-        # emit(doc.timestamp, doc);
-        # }
-        # }
-        return db.view("_design/robot_filters/_view/pose_events",limit=10)
+        start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
+        end_time_range = datetime.datetime.now()
+        return PoseEvent.objects().filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
 
     elif query_id is 3:
-        # function (doc) {
-        # if(doc.name=="location_event" && doc.latitude > 30 && doc.longitude < 50){
-        # emit(doc.timestamp, doc);
-        # }
-        # }
         #get all Location between certain latitude and longitude ranges
-        return db.view("_design/robot_filters/_view/location_events")
+        return LocationEvent.objects().filter(latitude__gt=30).filter(longitude__lt=50)
 
     return None
