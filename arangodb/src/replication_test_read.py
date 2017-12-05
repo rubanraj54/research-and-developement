@@ -29,10 +29,10 @@ if __name__ == '__main__':
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
 
-    db_init()
-    sync_tables()
-    for speed_event in SpeedEvent.objects():
-        speed_event.delete()
+    db = db_init()
+    for speed_event in db.collection('speed_events'):
+        db.collection('speed_events').delete(speed_event)
+
     print "speed documents deleted successfully "
 
     speed_ids = range(100)
@@ -41,7 +41,8 @@ if __name__ == '__main__':
         speed_ids_copy = speed_ids
         for _speed_id in speed_ids_copy:
             #if a node is found in other robot (means replicated), then remove its id from array
-            if SpeedEvent.objects().allow_filtering().filter(speed_id = _speed_id).count() > 0:
+            if db.collection('speed_events').find({'speed_id':_speed_id}).count() > 0:
+            # if SpeedEvent.objects().allow_filtering().filter(speed_id = _speed_id).count() > 0:
                 logging.info("replica_test_read robot_id " + robot_id +" event_id "+ str(_speed_id) +" timestamp "+str(datetime.datetime.now()))
                 speed_ids.remove(_speed_id)
     print "replication test read finished"
