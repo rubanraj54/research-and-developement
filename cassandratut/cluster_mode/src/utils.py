@@ -117,7 +117,7 @@ def run_read_query(query_id):
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
         end_time_range = datetime.datetime.now()
-        return PoseEvent.objects().allow_filtering().filter(robot_id = robot_id).filter(event_timestamp__lt=end_time_range).filter(event_timestamp__gt=start_time_range)[:10]
+        return PoseEvent.objects().allow_filtering().filter(robot_id = robot_id).filter(event_timestamp__lt=end_time_range).filter(event_timestamp__gt=start_time_range).limit(10)
 
     elif query_id is 3:
         #get all Location between certain latitude and longitude ranges
