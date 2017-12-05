@@ -15,8 +15,6 @@ if __name__ == '__main__':
 
     usecase_name = sys.argv[2]
 
-    # mode = sys.argv[3]
-
 
     filepath = "/var/executionlogs/"+usecase_name+"/"
 
@@ -31,19 +29,20 @@ if __name__ == '__main__':
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
 
-    db_init()
-    for speed_event in SpeedEvent.objects():
-        speed_event.delete()
-    print "speed documents deleted successfully "
+    db = db_init()
+    try:
+        speed_events = db.collection('speed_events')
+    except:
+        speed_events = db.create_collection('speed_events')
 
     for i in range(100):
         _timestamp = datetime.datetime.now()
-        speed_event = SpeedEvent.create(robot_id=robot_id,
-                                 name='speed_event',
-                                 speed_id=i,
-                                 desired_speed=123.2,
-                                 measured_speed=34.34343,
-                                 angular_speed=123.324,
-                                 event_timestamp=datetime.datetime.now())
+        speed_events.insert({'robot_id':robot_id,
+                            'name':'speed_event',
+                            'speed_id':i,
+                            'desired_speed':123.2,
+                            'measured_speed':34.34343,
+                            'angular_speed':123.324,
+                            'event_timestamp':int(datetime.datetime.now().strftime('%s'))})
         logging.info("replica_test_write robot_id " + robot_id +" event_id "+ str(i) +" timestamp "+str(_timestamp))
-    print "total speed events", SpeedEvent.objects().count()
+    print "total speed events", db.collection('speed_events').count()

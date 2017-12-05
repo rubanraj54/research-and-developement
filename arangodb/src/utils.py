@@ -84,30 +84,40 @@ def get_event(event_id,_robot_id):
         return {'image_base64': big_image_base64 , 'blob' : True, 'event_timestamp' : int(datetime.datetime.now().strftime('%s')),
                 'robot_id' : _robot_id,'name' : "rgb_event"}
 
-def run_read_query(query_id):
+def run_read_query(query_id,db):
+    robot_id = random.randint(1,3)
     if query_id is 0:
         # get rgb events(without blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
-        start_time_range = (end_time_range - datetime.timedelta(seconds=10))
+        start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
+        end_time_range = int(end_time_range.strftime('%s'))
 
-        return RGBEvent.objects().allow_filtering().filter(event_timestamp__gt=start_time_range).filter(event_timestamp__lt=end_time_range).filter(blob=False)
-
+        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id LIMIT 10 RETURN rgb_event',
+                            bind_vars={'start_time_range': start_time_range,'end_time_range':end_time_range,'blob':True,'robot_id':robot_id})
+        return rgb_events
     if query_id is 1:
         # get rgb events(with blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
-        start_time_range = (end_time_range - datetime.timedelta(seconds=10))
+        start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
+        end_time_range = int(end_time_range.strftime('%s'))
 
-        return RGBEvent.objects().allow_filtering().filter(event_timestamp__gt=start_time_range).filter(event_timestamp__lt=end_time_range).filter(blob=True)
-
+        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id LIMIT 10 RETURN rgb_event',
+                            bind_vars={'start_time_range': start_time_range,'end_time_range':end_time_range,'blob':False,'robot_id':robot_id})
+        return rgb_events
 
     elif query_id is 2:
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
-        end_time_range = datetime.datetime.now()
-        return PoseEvent.objects().allow_filtering().filter(event_timestamp__lt=end_time_range).filter(event_timestamp__gt=start_time_range)[:10]
+        start_time_range = int(start_time_range.strftime('%s'))
+
+        pose_events = db.aql.execute('FOR pose_event IN pose_events FILTER pose_event.event_timestamp > @value LIMIT 10 RETURN pose_event',
+                                     bind_vars={'value': start_time_range})
+        return pose_events
 
     elif query_id is 3:
         #get all Location between certain latitude and longitude ranges
-        return LocationEvent.objects().allow_filtering().filter(latitude__gt=30).filter(longitude__lt=50)
-
+        location_events = db.aql.execute('FOR location_event IN location_events FILTER location_event.latitude > @latitude &&  location_event.longitude < @longitude RETURN location_event',
+                             bind_vars={'latitude': 30,'longitude' : 50})
+        return location_events
+    
     return None
