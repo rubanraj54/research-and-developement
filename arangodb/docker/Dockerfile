@@ -1,4 +1,7 @@
-FROM cassandra:3.10
+FROM arangodb/arangodb:3.1.13
+
+COPY wait-for-it.sh /opt/
+RUN chmod +x /opt/wait-for-it.sh
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -9,4 +12,4 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libev-dev \
   && rm -rf /var/lib/apt/lists/*
 
-RUN pip install cassandra-driver
+RUN pip install python-arango

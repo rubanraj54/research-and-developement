@@ -12,12 +12,11 @@ import os, os.path
 
 def consume(q):
     db = db_init()
-    # _logger = setup_logger('query_execution_logger', "/var/executionlogs/QE_orientdb_robot_id_1"+time_stamp_log_file+".log")
     while(True):
         event,event_id = q.get()
 
         start_time = timeit.default_timer()
-        stored_event = create_event(event_id,event)
+        stored_event = create_event(db,event_id,event)
         end_time = timeit.default_timer()
         logging.info("Robot_id: " + robot_id +" Event : "+str(event_id) +" " + str(end_time - start_time) + " sec ")
         q.task_done()
@@ -63,9 +62,6 @@ if __name__ == '__main__':
                                 format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                                 datefmt='%H:%M:%S',
                                 level=logging.INFO)
-
-    db_init()
-    sync_tables()
 
     q = Queue.Queue(maxsize = 0)
 

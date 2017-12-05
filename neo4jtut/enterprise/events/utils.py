@@ -88,22 +88,25 @@ def run_query(query_id):
         # get rgb events(without blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
         start_time_range = (end_time_range - datetime.timedelta(seconds=10))
-        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=False)
+        return RGBEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range).filter(blob=False)
 
     elif query_id is 1:
         # get rgb events(with blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
         start_time_range = (end_time_range - datetime.timedelta(seconds=10))
-        return RGBEvent.objects().filter(timestamp__gt=start_time_range).filter(timestamp__lt=end_time_range).filter(blob=True)
+        return RGBEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range).filter(blob=True)
 
     elif query_id is 2:
         #get first 10 PoseEvents generated today
         start_time_range = datetime.datetime.combine(datetime.date.today(), datetime.time())
-        end_time_range = datetime.datetime.now()
-        return PoseEvent.objects().filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
+        start_time_range=int(start_time_range.strftime('%s'))
+        query = "MATCH (pose:PoseEvent) where pose.timestamp > "+str(start_time_range)+" return pose limit 10"
+        return db.cypher_query(query)
+
+        # return PoseEvent.nodes.filter(timestamp__lt=end_time_range).filter(timestamp__gt=start_time_range)[:10]
 
     elif query_id is 3:
         #get all Pose generated between certain latitude and longitude ranges
-        return LocationEvent.objects().filter(latitude__gt=30).filter(longitude__lt=50)
+        return LocationEvent.nodes.filter(latitude__gt=30).filter(longitude__lt=50)
 
     return None

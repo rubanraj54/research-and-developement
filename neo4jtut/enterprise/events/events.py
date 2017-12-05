@@ -1,5 +1,5 @@
 from neomodel import (config, StructuredNode, StringProperty, IntegerProperty,BooleanProperty,
-    UniqueIdProperty, RelationshipTo, RelationshipFrom,cardinality,FloatProperty,DateTimeProperty)
+    UniqueIdProperty, RelationshipTo, RelationshipFrom,cardinality,FloatProperty,DateTimeProperty,db)
 
 config.DATABASE_URL = 'bolt://neo4j:admin@localhost:7687'
 config.NEOMODEL_CYPHER_DEBUG = 0
