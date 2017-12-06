@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  influxdbrobot1:
+    image: influx-robot:latest
+    ports:
+      - 8086:8086
+    volumes:
+      - $HOME/influxdb:/var/lib/influxdb
+      - $PWD/../src:/src
+      - $HOME/Desktop/logs/influxdb/executionlogs1:/var/executionlogs/

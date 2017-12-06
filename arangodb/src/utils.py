@@ -92,7 +92,7 @@ def run_read_query(query_id,db):
         start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
         end_time_range = int(end_time_range.strftime('%s'))
 
-        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id LIMIT 10 RETURN rgb_event',
+        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id RETURN rgb_event',
                             bind_vars={'start_time_range': start_time_range,'end_time_range':end_time_range,'blob':True,'robot_id':robot_id})
         return rgb_events
     if query_id is 1:
@@ -101,7 +101,7 @@ def run_read_query(query_id,db):
         start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
         end_time_range = int(end_time_range.strftime('%s'))
 
-        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id LIMIT 10 RETURN rgb_event',
+        rgb_events = db.aql.execute('FOR rgb_event IN rgb_events FILTER rgb_event.event_timestamp > @start_time_range && rgb_event.event_timestamp < @end_time_range && rgb_event.blob == @blob && rgb_event.robot_id == @robot_id RETURN rgb_event',
                             bind_vars={'start_time_range': start_time_range,'end_time_range':end_time_range,'blob':False,'robot_id':robot_id})
         return rgb_events
 
@@ -119,5 +119,5 @@ def run_read_query(query_id,db):
         location_events = db.aql.execute('FOR location_event IN location_events FILTER location_event.latitude > @latitude &&  location_event.longitude < @longitude RETURN location_event',
                              bind_vars={'latitude': 30,'longitude' : 50})
         return location_events
-    
+
     return None
