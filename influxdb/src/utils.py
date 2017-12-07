@@ -117,14 +117,14 @@ def run_read_query(client,query_id):
     if query_id is 0:
         # get rgb events(without blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
-        start_time_range = int((end_time_range - datetime.timedelta(seconds=3000)).strftime('%s'))
+        start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
         end_time_range = int(end_time_range.strftime('%s'))
         query = "select * from rgb_events where blob=False and timestamp>"+str(start_time_range)+" and timestamp<"+str(end_time_range)+";"
         return client.query(query)
     if query_id is 1:
         # get rgb events(with blob) for last 10 seconds
         end_time_range = datetime.datetime.now()
-        start_time_range = int((end_time_range - datetime.timedelta(seconds=3000)).strftime('%s'))
+        start_time_range = int((end_time_range - datetime.timedelta(seconds=10)).strftime('%s'))
         end_time_range = int(end_time_range.strftime('%s'))
         query = "select * from rgb_events where blob=True and timestamp>"+str(start_time_range)+" and timestamp<"+str(end_time_range)+";"
         return client.query(query)

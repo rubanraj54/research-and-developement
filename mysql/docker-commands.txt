@@ -1,0 +1,11 @@
+docker run --name mysql1 --net mysql-cluster -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=mydata -p 33061:3306 -v $HOME/mysql/node1/conf.d:/etc/mysql/mysql.conf.d/   -v $HOME/mysql/node1/data:/var/lib/mysql -v $HOME/mysql/node1/log:/var/log/mysql -v $HOME/mysql/node1/backup:/backup -v $HOME/Desktop/logs/mysql/executionlogs1:/var/executionlogs/ -v /home/ruby/repos/research-and-developement/mysql/src:/src mysql-robot
+
+docker run --name mysql2  --net mysql-cluster -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=mydata -p 33062:3306 -v $HOME/mysql/node2/conf.d:/etc/mysql/mysql.conf.d/   -v $HOME/mysql/node2/data:/var/lib/mysql -v $HOME/mysql/node2/log:/var/log/mysql -v $HOME/mysql/node2/backup:/backup -v $HOME/Desktop/logs/mysql/executionlogs2:/var/executionlogs/ -v /home/ruby/repos/research-and-developement/mysql/src:/src mysql-robot
+
+
+stop slave;
+CHANGE MASTER TO MASTER_HOST = 'mysql1', MASTER_USER = 'replicator',MASTER_PASSWORD = 'repl1234or', MASTER_LOG_FILE = 'mysql-bin.000003',MASTER_LOG_POS = 154;
+start slave;
+stop slave;
+CHANGE MASTER TO MASTER_HOST = 'mysql2', MASTER_USER = 'replicator',MASTER_PASSWORD = 'repl1234or', MASTER_LOG_FILE = 'mysql-bin.000003',MASTER_LOG_POS = 154;
+start slave;

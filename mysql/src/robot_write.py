@@ -11,15 +11,16 @@ from utils import *
 import os, os.path
 
 def consume(q):
-    client = db_init()
+    connection = db_init()
     while(True):
         event,event_id = q.get()
 
         start_time = timeit.default_timer()
-        stored_event = create_event(client,event)
+        stored_event = create_event(connection,event_id,event)
         end_time = timeit.default_timer()
         logging.info("Robot_id: " + robot_id +" Event : "+str(event_id) +" " + str(end_time - start_time) + " sec ")
         q.task_done()
+    connection.close()
 
     print "all events consumed by database"
 
