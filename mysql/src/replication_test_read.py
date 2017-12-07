@@ -6,7 +6,7 @@ import sys
 import timeit
 import logging
 import os, os.path
-from pymongo import Connection
+from utils import *
 
 if __name__ == '__main__':
 
@@ -27,19 +27,27 @@ if __name__ == '__main__':
                         datefmt='%H:%M:%S',
                         level=logging.INFO)
 
-    client = db_init()
+    connection = db_init()
 
-    client.delete_series(measurement="speed_events")
+    query = "delete from speed_events;"
+
+    with connection.cursor() as cursor:
+        print cursor.execute(query)
 
     print "speed events deleted successfully"
+    connection.close()
 
     speed_ids = range(100)
 
     while len(speed_ids) > 0:
         speed_ids_copy = speed_ids
         for _speed_id in speed_ids_copy:
+            connection = db_init()
+            with connection.cursor() as cursor:
             #if a node is found in other robot (means replicated), then remove its id from array
-            if len(list(client.query("select * from speed_events where speed_id = "+str(_speed_id)+";").get_points(measurement="speed_events"))) > 0:
-                logging.info("replica_test_read robot_id " + robot_id +" event_id "+ str(_speed_id) +" timestamp "+str(datetime.datetime.now()))
-                speed_ids.remove(_speed_id)
+                # print int(cursor.execute("select * from speed_events where speed_id = "+str(_speed_id)+";"))
+                if int(cursor.execute("select * from speed_events where speed_id = "+str(_speed_id)+";")) > 0:
+                    logging.info("replica_test_read robot_id " + robot_id +" event_id "+ str(_speed_id) +" timestamp "+str(datetime.datetime.now()))
+                    speed_ids.remove(_speed_id)
+            connection.close()
     print "replication test read finished"
