@@ -12,7 +12,7 @@ import os, os.path
 
 def read(robot_id,query_id):
     connection = db_init()
-    t_end = time.time() + (10 * minutes)
+    t_end = time.time() + (60 * minutes)
 
     while time.time() < t_end:
         start_time = timeit.default_timer()
