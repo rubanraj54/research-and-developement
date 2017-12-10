@@ -39,19 +39,21 @@ if __name__ == '__main__':
     init_edges(client)
     root = init_root_vertex(robot_id,client)
 
-    client.command("delete vertex SpeedEvent")
+    print client.command("delete vertex SpeedEvent")
+    print len(client.command("select * from SpeedEvent"))
 
     # if mode is 1 do write process
     if mode is "1":
         for i in range(100):
             _timestamp = datetime.datetime.now()
             event_query = "insert into SpeedEvent set speed_id="+str(i)+",measured_speed=24.3453,angular_speed=32.234,timestamp=DATE(\""+str(_timestamp)+"\")"
-            # print client.command(event_query)[0]._rid
+            print client.command(event_query)[0]._rid
             # break
             logging.info("replica_test_write robot_id " + robot_id +" event_id "+ str(i) +" timestamp "+str(_timestamp))
     # if mode is 2, check nodes are replicated in other robot
     else:
         speed_ids = range(100)
+        print "here"
         while len(speed_ids) > 0:
             speed_ids_copy = speed_ids
             for _speed_id in speed_ids_copy:

@@ -1,3 +1,4 @@
+results/logs/
 
 *.pyc
 
@@ -8,7 +9,3 @@ orientdbtut/clustermode/\.ipynb_checkpoints/
 .ipynb_checkpoints
 
 *.log
-
-*.0_hz
-
-*.0hz
