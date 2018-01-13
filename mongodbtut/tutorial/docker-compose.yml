@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  mongo-node1:
+    image: mongo
+    ports:
+      - 30001:27017
+    volumes:
+      - $HOME/mongodb/data_node1:/data/db
+    networks:
+      - mongocluster
+    command: mongod --replSet comments
+
+  mongo-node2:
+    image: mongo
+    ports:
+      - 30002:27017
+    volumes:
+      - $HOME/mongodb/data_node2:/data/db
+    networks:
+      - mongocluster
+    command: mongod --replSet comments
+    depends_on:
+      - mongo-node1
+
+  mongo-node3:
+    image: mongo
+    ports:
+      - 30003:27017
+    volumes:
+      - $HOME/mongodb/data_node3:/data/db
+    networks:
+      - mongocluster
+    command: mongod --replSet comments
+    depends_on:
+      - mongo-node1
+
+networks:
+  mongocluster:
+    driver: bridge
