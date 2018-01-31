@@ -9,3 +9,5 @@ orientdbtut/clustermode/\.ipynb_checkpoints/
 .ipynb_checkpoints
 
 *.log
+
+*.md~
