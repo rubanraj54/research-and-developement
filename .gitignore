@@ -13,3 +13,9 @@ orientdbtut/clustermode/\.ipynb_checkpoints/
 *.md~
 
 *.bib~
+
+*.dbf
+
+*.shx
+
+*.shp
