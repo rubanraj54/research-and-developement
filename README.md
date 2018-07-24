@@ -5,3 +5,4 @@ For more information about how to run programs, visit github repository.
 
 https://github.com/rubanraj54/research-and-developement
 
+![Preview](https://raw.githubusercontent.com/rubanraj54/research-and-developement/master/g2290.png)
