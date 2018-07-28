@@ -94,3 +94,19 @@ One can adapt the mysql workbench for their own events/sensor data by following 
 * create table `table_name` (parameters...); 
 * For eg. create table `location_events` (robot_id int,latitude float,longitude float,offset float,timestamp int,accuracy float);
 * Once successfully created new table, go to mysql/src/utils.py file and add new event information in `create_event()`, `get_event()`, and `run_read_query()`.
+
+#### How to run write scenario for existing scenario:
+<pre>
+python replication_test_write.py param_one param_two param_three param_four  
+param_one = robot_id (integer)
+param_two = frequency (integer in Hz)
+param_three = minutes (integer)
+param_four = usecase_name (string)
+</pre>
+
+#### How to run read scenario for existing scenario:
+<pre>
+python replication_test_read.py param_one param_two 
+param_one = robot_id (integer)
+param_two = usecase_name (string)
+</pre>
