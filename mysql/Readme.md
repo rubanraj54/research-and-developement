@@ -87,3 +87,10 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 +--------------+------------+------+-----+---------+-------+
 ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 </pre>
+
+One can adapt the mysql workbench for their own events/sensor data by following below steps,
+* Create a new table to store data from new event.
+* To create a new table, execute following command in mysql terminal.
+* create table `table_name` (parameters...); 
+* For eg. create table `location_events` (robot_id int,latitude float,longitude float,offset float,timestamp int,accuracy float);
+* Once successfully created new table, go to mysql/src/utils.py file and add new event information in `create_event()`, `get_event()`, and `run_read_query()`.
